@@ -27,7 +27,7 @@ export async function getCasesByDeal(email: string): Promise<ZohoCase[]> {
   // Search for cases where the related deal field equals the deal ID
   // The field name might be "Deal_Name" (ID) or "Related_To"
   const result = await zohoRequest(
-    `/Cases/search?criteria=(Email:equals:${encodeURIComponent("toblera49@gmail.com")})`,
+    `/Cases/search?criteria=(Email:equals:${encodeURIComponent(email)})`,
   );
   // zohoRequest may return null if no content
   if (!result || !result.data) {

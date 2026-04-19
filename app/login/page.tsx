@@ -5,6 +5,7 @@ import { useRouter } from "next/navigation";
 import { authenticate } from "@/app/actions/auth";
 import Link from "next/link";
 import { Mail, Key } from "lucide-react";
+import Image from "next/image";
 
 export default function LoginPage() {
   const [email, setEmail] = useState("");
@@ -33,8 +34,16 @@ export default function LoginPage() {
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md">
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-blue-700">CHOICE</h1>
-          <p className="text-lg font-medium text-gray-600">Home Warranty</p>
+          <Link href="/" className="flex items-center gap-2">
+            <img
+              src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
+              alt="Prestige Home Guard"
+              width={400}
+              height={100}
+              className="mx-auto h-auto w-full max-w-xs"
+            
+            />
+          </Link>
         </div>
 
         <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-gray-200">

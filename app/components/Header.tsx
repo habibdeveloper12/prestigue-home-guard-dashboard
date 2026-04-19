@@ -31,8 +31,8 @@ export default function Header() {
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
             <img
-              src={"/PHG-Logo.png"}
-              alt="HomeGuard Logo"
+              src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
+              alt="Prestige Home Guard"
               width={150}
               height={80}
             />
