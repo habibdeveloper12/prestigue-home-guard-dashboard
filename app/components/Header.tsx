@@ -5,6 +5,8 @@ import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
 import { Home, FileText, Shield, User, Menu, X, LogOut } from "lucide-react";
 import { useState } from "react";
+import Image from "next/image";
+
 
 const navItems = [
   { name: "Dashboard", href: "/", icon: Home },
@@ -28,12 +30,12 @@ export default function Header() {
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
           <Link href="/" className="flex items-center gap-2">
-            <div className="rounded-lg bg-blue-600 p-1.5">
-              <Shield className="h-5 w-5 text-white" />
-            </div>
-            <span className="text-xl font-semibold text-gray-900">
-              HomeGuard
-            </span>
+            <img
+              src={"/PHG-Logo.png"}
+              alt="HomeGuard Logo"
+              width={150}
+              height={80}
+            />
           </Link>
 
           {/* Desktop Navigation */}

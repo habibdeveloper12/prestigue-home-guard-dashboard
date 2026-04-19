@@ -1,7 +1,7 @@
 // app/auth.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { findDealByEmailAndPolicy } from "@/lib/zoho/deals";
+import { findDealByEmailAndPolicy } from "../lib/zoho/deals"; // adjust path if needed
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -13,15 +13,18 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.policyNumber) return null;
-        const deal = await findDealByEmailAndPolicy(
-          credentials.email as string,
-          credentials.policyNumber as string,
-        );
+
+        const email = credentials.email as string;
+        const policyNumber = credentials.policyNumber as string;
+
+        const deal = await findDealByEmailAndPolicy(email, policyNumber);
         if (!deal) return null;
+
+        // Return an object that matches the NextAuth User type
         return {
           id: deal.id,
-          email: credentials.email,
-          policyNumber: credentials.policyNumber,
+          email: email,
+          policyNumber: policyNumber,
           dealId: deal.id,
         };
       },
