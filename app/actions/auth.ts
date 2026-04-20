@@ -6,14 +6,19 @@ import { findDealByEmailAndPolicy } from "../../lib/zoho/deals";
 
 export async function authenticate(email: string, policyNumber: string) {
   try {
-    // Verify credentials against Zoho
     const deal = await findDealByEmailAndPolicy(email, policyNumber);
- console.log("Authentication attempt for:", email, policyNumber, "Found deal:", deal);
     if (!deal) {
       return { error: "Invalid email or policy number" };
     }
 
-    // Sign in with NextAuth
+    // Reject if the deal stage is "Cancelled"
+    if (deal.Stage === "Cancelled") {
+      return {
+        error: "Your contract has been cancelled. Please contact support.",
+      };
+    }
+
+    // Proceed with NextAuth sign-in
     await signIn("credentials", {
       email,
       policyNumber,
@@ -23,6 +28,6 @@ export async function authenticate(email: string, policyNumber: string) {
 
     return { success: true };
   } catch (error) {
-    return { error: "Authentication failed" };
+    return { error: "Authentication failed. Please try again." };
   }
 }

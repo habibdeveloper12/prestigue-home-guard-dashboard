@@ -48,9 +48,9 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
   const contractRate = deal.Total_Plan_Cost
     ? `$${deal.Total_Plan_Cost.toLocaleString()}`
     : "$0.00";
-  const serviceCallFee = deal.Service_Call_Fee
-    ? `$${deal.Service_Call_Fee}`
-    : "$75.00"; // default
+  const serviceCallFee = deal.SCF
+    ? `$${deal.SCF}`
+    : "$00.00"; // default
 
   const details = [
     {

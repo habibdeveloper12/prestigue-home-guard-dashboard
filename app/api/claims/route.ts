@@ -1,3 +1,4 @@
+// app/api/claims/route.ts
 import { auth } from "../../auth";
 import { NextRequest, NextResponse } from "next/server";
 import { zohoRequest } from "@/lib/zoho/client";
@@ -9,18 +10,43 @@ export async function POST(request: NextRequest) {
   }
 
   const body = await request.json();
+  const { system, issue, lastWorking, tenant, bestPhone, description } = body;
 
   try {
+    const formattedLastWorking = lastWorking
+      ? new Date(lastWorking).toLocaleString("en-US", {
+          dateStyle: "full",
+          timeStyle: "short",
+        })
+      : "Not provided";
+
+    const fullDescription = `
+System: ${system}
+Issue: ${issue}
+Last Working: ${formattedLastWorking}
+Tenant: ${tenant}
+Best Phone: ${bestPhone}
+
+Customer Description:
+${description}
+    `.trim();
+
+    const subject = `${system} - ${issue.substring(0, 50)}`;
+
     const result = await zohoRequest("/Cases", {
       method: "POST",
       body: JSON.stringify({
         data: [
           {
-            Deal_Name: session.user.dealId, // link to the deal
-            Subject: body.system, // or body.issue
-            Description: body.description,
-            Status: "Pending",
-            // Map other fields as needed
+            Related_Policy: session.user.dealId,
+            Subject: subject,
+            Description: fullDescription,
+            Claim_Type: system,
+            Status: "Received",
+            Case_Origin: "Web",
+            Best_Phone: bestPhone,
+            Tenant: tenant ? true: false,
+            Date_reported: new Date().toISOString().split("T")[0],
           },
         ],
       }),

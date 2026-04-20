@@ -21,8 +21,8 @@ export default function ContractCard({ deal }: ContractCardProps) {
     ? new Date(deal.End_Date).toLocaleDateString("en-US")
     : "N/A";
   const freeMonths = deal.Free_Months ? `${deal.Free_Months} Free Months` : "";
-  const orderDate = deal.Created_Time
-    ? new Date(deal.Created_Time).toLocaleDateString("en-US")
+  const orderDate = deal.Sale_Date
+    ? new Date(deal.Sale_Date).toLocaleDateString("en-US")
     : "N/A";
 
   return (

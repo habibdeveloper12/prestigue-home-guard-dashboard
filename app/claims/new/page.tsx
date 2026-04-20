@@ -2,39 +2,36 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, AlertCircle } from "lucide-react";
+import { ChevronLeft, AlertCircle, Loader2 } from "lucide-react";
 import Link from "next/link";
+import { useSession } from "next-auth/react";
 
-// Sample dropdown options
+// Full system options from image
 const systemOptions = [
   "Air Conditioning System",
-  "Heating System",
-  "Refrigerator",
-  "Dishwasher",
-  "Clothes Washer",
+  "Built-In Microwave",
+  "Ceiling and Exhaust Fans",
   "Clothes Dryer",
-  "Garage Door Opener",
-  "Water Heater",
-  "Plumbing System",
+  "Clothes Washer",
+  "Dishwasher",
+  "Ductwork",
   "Electrical System",
-];
-
-const unitOptions = ["1", "2", "3", "4", "5+"];
-const issueOptions = [
-  "Not cooling",
-  "Not heating",
-  "Leaking water",
-  "Strange noise",
-  "Not turning on",
-  "Error code displayed",
-  "Other",
+  "Garage Door Opener",
+  "Garbage Disposal",
+  "Heating System",
+  "Oven Stove Cooktop",
+  "Plumbing Stoppage",
+  "Plumbing System",
+  "Refrigerator",
+  "Water Heater",
+  "Whirlpool Bathtub",
 ];
 
 export default function NewClaimPage() {
   const router = useRouter();
+  const { data: session } = useSession();
   const [formData, setFormData] = useState({
-    system: "Air Conditioning System",
-    units: "",
+    system: "",
     issue: "",
     lastWorking: "",
     tenant: "No",
@@ -43,6 +40,7 @@ export default function NewClaimPage() {
   });
   const [errors, setErrors] = useState<Record<string, string>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+  const [submitError, setSubmitError] = useState("");
 
   const handleChange = (
     e: React.ChangeEvent<
@@ -51,7 +49,6 @@ export default function NewClaimPage() {
   ) => {
     const { name, value } = e.target;
     setFormData((prev) => ({ ...prev, [name]: value }));
-    // Clear error when field is edited
     if (errors[name]) {
       setErrors((prev) => ({ ...prev, [name]: "" }));
     }
@@ -60,8 +57,7 @@ export default function NewClaimPage() {
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
     if (!formData.system) newErrors.system = "System is required";
-    if (!formData.units) newErrors.units = "Number of units is required";
-    if (!formData.issue) newErrors.issue = "Issue is required";
+    if (!formData.issue.trim()) newErrors.issue = "Issue is required";
     if (!formData.lastWorking)
       newErrors.lastWorking = "Please specify when it last worked";
     if (!formData.bestPhone)
@@ -80,17 +76,40 @@ export default function NewClaimPage() {
     }
 
     setIsSubmitting(true);
-    // Simulate API call
-    await new Promise((resolve) => setTimeout(resolve, 1000));
-    setIsSubmitting(false);
-    // Redirect to claims list or success page
-    router.push("/claims");
+    setSubmitError("");
+
+    try {
+      const response = await fetch("/api/claims", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({
+          system: formData.system,
+          issue: formData.issue,
+          lastWorking: formData.lastWorking,
+          tenant: formData.tenant,
+          bestPhone: formData.bestPhone,
+          description: formData.description,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (!response.ok) {
+        throw new Error(data.error || "Failed to create claim");
+      }
+await new Promise((resolve) => setTimeout(resolve, 1500));
+      router.push("/claims");
+      router.refresh();
+    } catch (error: any) {
+      setSubmitError(error.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
       <div className="space-y-6">
-        {/* Back button */}
         <Link
           href="/claims"
           className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-700"
@@ -99,7 +118,6 @@ export default function NewClaimPage() {
           Back to Claims
         </Link>
 
-        {/* Page Header */}
         <div>
           <h1 className="text-2xl font-semibold text-gray-900">
             Add a new Claim
@@ -109,12 +127,11 @@ export default function NewClaimPage() {
               Contract Number:
             </span>
             <span className="text-base font-semibold text-gray-900">
-              271349963
+              {session?.user?.policyNumber || "N/A"}
             </span>
           </div>
         </div>
 
-        {/* Form Card */}
         <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
           <form onSubmit={handleSubmit} className="space-y-6">
             {/* System Dropdown */}
@@ -134,6 +151,7 @@ export default function NewClaimPage() {
                   errors.system ? "border-red-300" : "border-gray-300"
                 } bg-white py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
               >
+                <option value="">Select a System</option>
                 {systemOptions.map((opt) => (
                   <option key={opt} value={opt}>
                     {opt}
@@ -145,36 +163,7 @@ export default function NewClaimPage() {
               )}
             </div>
 
-            {/* Number of units */}
-            <div>
-              <label
-                htmlFor="units"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Number of units <span className="text-red-500">*</span>
-              </label>
-              <select
-                id="units"
-                name="units"
-                value={formData.units}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.units ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              >
-                <option value="">Select --</option>
-                {unitOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
-              {errors.units && (
-                <p className="mt-1 text-sm text-red-600">{errors.units}</p>
-              )}
-            </div>
-
-            {/* Issue Dropdown */}
+            {/* Issue Text Field */}
             <div>
               <label
                 htmlFor="issue"
@@ -182,22 +171,17 @@ export default function NewClaimPage() {
               >
                 Issue <span className="text-red-500">*</span>
               </label>
-              <select
+              <input
+                type="text"
                 id="issue"
                 name="issue"
                 value={formData.issue}
                 onChange={handleChange}
+                placeholder="e.g., Not cooling, Leaking water"
                 className={`mt-1 block w-full rounded-lg border ${
                   errors.issue ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              >
-                <option value="">Select --</option>
-                {issueOptions.map((opt) => (
-                  <option key={opt} value={opt}>
-                    {opt}
-                  </option>
-                ))}
-              </select>
+                } bg-white py-2.5 px-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
+              />
               {errors.issue && (
                 <p className="mt-1 text-sm text-red-600">{errors.issue}</p>
               )}
@@ -311,7 +295,12 @@ export default function NewClaimPage() {
               )}
             </div>
 
-            {/* Required fields note */}
+            {submitError && (
+              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+                {submitError}
+              </div>
+            )}
+
             <div className="flex items-start gap-2 rounded-lg bg-blue-50 p-4">
               <AlertCircle size={18} className="mt-0.5 text-blue-600" />
               <p className="text-sm text-blue-700">
@@ -319,14 +308,20 @@ export default function NewClaimPage() {
               </p>
             </div>
 
-            {/* Submit Button */}
             <div className="flex justify-end">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                className="inline-flex items-center justify-center gap-2 rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
               >
-                {isSubmitting ? "Submitting..." : "Submit Claim"}
+                {isSubmitting ? (
+                  <>
+                    <Loader2 size={16} className="animate-spin" />
+                    Submitting...
+                  </>
+                ) : (
+                  "Submit Claim"
+                )}
               </button>
             </div>
           </form>
