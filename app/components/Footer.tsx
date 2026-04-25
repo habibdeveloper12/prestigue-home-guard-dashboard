@@ -73,7 +73,7 @@ export default function Footer() {
             {/* Column 3 – Phone */}
             <div className="flex flex-col items-center justify-center md:items-start">
               <div className="flex items-start gap-3">
-                <span className="flex h-9 w-9 items-center justify-center rounded-full bg-[#FFD974] text-black">
+                <span className="flex h-9 w-9 items-start justify-center rounded-full bg-[#FFD974] text-black">
                   <Phone size={18} />
                 </span>
                 <div>
@@ -98,11 +98,11 @@ export default function Footer() {
         <div className="mx-auto max-w-[1350px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-white/20 pb-10">
             {/* Left column – Company info */}
-            <div className=" w-2/3 flex flex-col justify-top">
-              <h2 className="font-['Poppins'] text-[40px] font-bold text-white mb-2">
+            <div className=" w-2/3 sm:w-full flex flex-col justify-top">
+              <h2 className="font-['Poppins'] sm:text-center text-[40px] font-bold text-white mb-2">
                 Prestige Home Guard
               </h2>
-              <p className="font-['Poppins'] text-[15px] leading-relaxed text-white/70 mb-6">
+              <p className="font-['Poppins'] sm:text-center text-[15px] leading-relaxed text-white/70 mb-6">
                 Prestige Home Guard provides trusted home warranty services,
                 ensuring hassle-free repairs, replacements, and protection for
                 essential home systems and appliances.
