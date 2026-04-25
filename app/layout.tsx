@@ -3,6 +3,8 @@ import { Inter } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
 import { SessionProvider } from "next-auth/react";
+import NewHeader from "./components/NewHeader";
+import Footer from "./components/Footer";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -20,8 +22,10 @@ export default function RootLayout({
     <html lang="en">
       <body suppressHydrationWarning>
         <SessionProvider>
-          <Header />
+          {/* <Header /> */}
+          <NewHeader />
           <main>{children}</main>
+          <Footer/>
         </SessionProvider>
       </body>
     </html>

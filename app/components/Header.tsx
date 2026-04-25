@@ -29,14 +29,14 @@ export default function Header() {
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex h-16 items-center justify-between">
           {/* Logo */}
-          <Link href="/" className="flex items-center gap-2">
+          {/* <Link href="/" className="flex items-center gap-2">
             <img
               src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
               alt="Prestige Home Guard"
               width={150}
               height={80}
             />
-          </Link>
+          </Link> */}
 
           {/* Desktop Navigation */}
           <nav className="hidden md:flex md:items-center md:space-x-6">
