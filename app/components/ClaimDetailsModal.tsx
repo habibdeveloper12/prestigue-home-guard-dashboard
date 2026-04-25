@@ -69,7 +69,7 @@ export default function ClaimDetailsModal({
         {/* Header */}
         <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 rounded-t-2xl">
           <h2 className="text-xl font-semibold text-gray-900">
-            Claim Details: {claim.Case_Number}
+            Claim Details: {claim.Claim_ID_No || claim.Case_Number}
           </h2>
           <button
             onClick={onClose}

@@ -129,7 +129,7 @@ export default function ClaimsClient({
                           onClick={() => setSelectedClaim(c)}
                           className="whitespace-nowrap px-6 py-4 text-sm font-medium text-blue-600 hover:underline"
                         >
-                          {c.Case_Number}
+                          {c.Claim_ID_No || c.Case_Number}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
                           {new Date(c.Created_Time).toLocaleString()}

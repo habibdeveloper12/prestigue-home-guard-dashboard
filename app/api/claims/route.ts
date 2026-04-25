@@ -36,6 +36,7 @@ ${description}
     const result = await zohoRequest("/Cases", {
       method: "POST",
       body: JSON.stringify({
+        trigger: ["workflow", "approval", "blueprint"],
         data: [
           {
             Related_Policy: session.user.dealId,
@@ -45,7 +46,7 @@ ${description}
             Status: "Received",
             Case_Origin: "Web",
             Best_Phone: bestPhone,
-            Tenant: tenant ? true: false,
+            Tenant: tenant ? true : false,
             Date_reported: new Date().toISOString().split("T")[0],
           },
         ],

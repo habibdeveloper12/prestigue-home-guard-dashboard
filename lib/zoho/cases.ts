@@ -3,6 +3,7 @@ import { zohoRequest } from "./client";
 
 export interface ZohoCase {
   id: string;
+  Claim_ID_No:string;
   Case_Number: string;
   Created_Time: string;
   Date_reported: string;
@@ -23,13 +24,11 @@ export interface ZohoCase {
   }>;
 }
 
-export async function getCasesByDeal(email: string): Promise<ZohoCase[]> {
-  // Search for cases where the related deal field equals the deal ID
-  // The field name might be "Deal_Name" (ID) or "Related_To"
+export async function getCasesByDeal(dealId: string): Promise<ZohoCase[]> {
+  // Filter by the Related_Policy lookup field (stores the Deal ID)
   const result = await zohoRequest(
-    `/Cases/search?criteria=(Email:equals:${encodeURIComponent(email)})`,
+    `/Cases/search?criteria=(Related_Policy:equals:${dealId})`,
   );
-  // zohoRequest may return null if no content
   if (!result || !result.data) {
     return [];
   }
