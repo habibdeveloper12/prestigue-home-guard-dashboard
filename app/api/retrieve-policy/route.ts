@@ -87,7 +87,7 @@ function buildEmailTemplate(
         <!-- Header with Logo -->
         <tr>
           <td style="padding: 30px 20px; text-align: center;">
-            <img src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png" alt="Prestige Home Guard" style="height: 60px; width: auto; display: block; margin: 0 auto;" />
+            <img src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png" alt="Prestige Home Guard" style="height: 60px; width: auto; display: block; margin: 0 auto;" />
           </td>
         </tr>
 

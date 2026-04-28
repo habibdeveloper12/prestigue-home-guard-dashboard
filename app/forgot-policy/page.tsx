@@ -56,7 +56,7 @@ export default function ForgotPolicyPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="flex items-center gap-2">
             <img
-              src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
+              src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png"
               alt="Prestige Home Guard"
               width={400}
               height={100}
