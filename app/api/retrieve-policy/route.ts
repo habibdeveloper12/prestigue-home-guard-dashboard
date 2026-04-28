@@ -119,7 +119,7 @@ function buildEmailTemplate(
           </td>
         </tr>
 
-        <!-- Divider -->
+   
         <tr>
           <td style="border-top: 1px solid #E0E0E0;"></td>
         </tr>
