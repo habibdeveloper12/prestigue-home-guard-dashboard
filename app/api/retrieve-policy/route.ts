@@ -111,7 +111,7 @@ function buildEmailTemplate(
 
             <p style="color: #333333; font-size: 16px; line-height: 1.5;">
               Use this policy number to log in to your account at<br>
-              <a href="https://my.prestigehomeguard.com/login" style="color: #0A2D53; text-decoration: underline; font-weight: bold;">app.prestigehomeguard.com</a>
+              <a href="https://my.prestigehomeguard.com/login" style="color: #0A2D53; text-decoration: underline; font-weight: bold;">my.prestigehomeguard.com</a>
             </p>
             <p style="color: #333333; font-size: 16px; line-height: 1.5;">
               If you did not request this information, please disregard this email or contact our support team.
