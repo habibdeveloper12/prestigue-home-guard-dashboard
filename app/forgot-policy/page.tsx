@@ -10,6 +10,7 @@ export default function ForgotPolicyPage() {
   const [submitted, setSubmitted] = useState(false);
   const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
   const [error, setError] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
   const recaptchaRef = useRef<ReCAPTCHA>(null);
 
   const handleRecaptchaChange = (token: string | null) => {
@@ -25,34 +26,45 @@ export default function ForgotPolicyPage() {
       return;
     }
 
-    // Here you would send email + token to your API route for verification
-    // Example:
- const res = await fetch("/api/retrieve-policy", {
-   method: "POST",
-   headers: { "Content-Type": "application/json" },
-   body: JSON.stringify({ email, recaptchaToken }),
- });
+    setIsSubmitting(true);
+    setError("");
 
- if (res.ok) {
-   setSubmitted(true);
- } else {
-   setError("Something went wrong. Please try again.");
- }
+    try {
+      const res = await fetch("/api/retrieve-policy", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ email, recaptchaToken }),
+      });
 
-    // For demonstration, we simulate success:
-    setSubmitted(true);
+      const data = await res.json();
+
+      if (!res.ok) {
+        throw new Error(data.error || "Something went wrong");
+      }
+
+      setSubmitted(true);
+    } catch (err: any) {
+      setError(err.message);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
     <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md">
-        {/* Brand Logo */}
         <div className="mb-8 text-center">
-          <h1 className="text-3xl font-bold text-blue-700">CHOICE</h1>
-          <p className="text-lg font-medium text-gray-600">Home Warranty</p>
+          <Link href="/" className="flex items-center gap-2">
+            <img
+              src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
+              alt="Prestige Home Guard"
+              width={400}
+              height={100}
+              className="mx-auto h-auto w-full max-w-xs"
+            />
+          </Link>
         </div>
 
-        {/* Card */}
         <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-gray-200">
           <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
             Send Policy #
@@ -60,7 +72,6 @@ export default function ForgotPolicyPage() {
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-5">
-              {/* Email Field */}
               <div>
                 <label
                   htmlFor="email"
@@ -84,7 +95,6 @@ export default function ForgotPolicyPage() {
                 </div>
               </div>
 
-              {/* Google reCAPTCHA Widget */}
               <div className="flex justify-center">
                 <ReCAPTCHA
                   ref={recaptchaRef}
@@ -93,7 +103,6 @@ export default function ForgotPolicyPage() {
                 />
               </div>
 
-              {/* Terms of Service Note */}
               <p className="text-xs text-gray-500">
                 This site is protected by reCAPTCHA and the Google{" "}
                 <a
@@ -120,12 +129,12 @@ export default function ForgotPolicyPage() {
                 <p className="text-sm font-medium text-red-600">{error}</p>
               )}
 
-              {/* Submit Button */}
               <button
                 type="submit"
-                className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2"
+                disabled={isSubmitting}
+                className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
               >
-                Retrieve Policy #
+                {isSubmitting ? "Retrieving..." : "Retrieve Policy #"}
               </button>
             </form>
           ) : (
@@ -155,7 +164,6 @@ export default function ForgotPolicyPage() {
             </div>
           )}
 
-          {/* Back to Sign In */}
           <div className="mt-6 text-center">
             <Link
               href="/login"
