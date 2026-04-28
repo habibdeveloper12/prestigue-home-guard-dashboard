@@ -86,7 +86,7 @@ function buildEmailTemplate(
       <table width="100%" cellpadding="0" cellspacing="0" style="max-width: 600px; margin: 0 auto; background-color: #ffffff; border-radius: 8px; overflow: hidden; box-shadow: 0 2px 8px rgba(0,0,0,0.1);">
         <!-- Header with Logo -->
         <tr>
-          <td style="padding: 30px 20px; text-align: center;">
+          <td class="" style="margin: 5px 0 0 0; padding: 20px 20px; text-align: center;">
             <img src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png" alt="Prestige Home Guard" style="height: 60px; width: auto; display: block; margin: 0 auto;" />
           </td>
         </tr>
