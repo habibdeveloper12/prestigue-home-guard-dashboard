@@ -3,7 +3,7 @@
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { signOut, useSession } from "next-auth/react";
-import { Home, FileText, Shield, User, Menu, X, LogOut } from "lucide-react";
+import { Home, FileText, Shield, User, Menu, X, LogOut, LogIn } from "lucide-react";
 import { useState } from "react";
 import Image from "next/image";
 
@@ -49,7 +49,7 @@ export default function Header() {
                   href={item.href}
                   className={`flex items-center gap-1.5 rounded-md px-3 py-2 text-sm font-medium transition ${
                     isActive
-                      ? "bg-blue-50 text-blue-700"
+                      ? "#0A2D53 bg-[#0A2D53] text-white"
                       : "text-gray-600 hover:bg-gray-100 hover:text-gray-900"
                   }`}
                 >
@@ -65,13 +65,24 @@ export default function Header() {
             <span className="text-sm text-gray-600">
               {session?.user?.email || "User"}
             </span>
-            <button
-              onClick={handleLogout}
-              className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
-            >
-              <LogOut size={16} />
-              Sign Out
-            </button>
+
+            {session?.user ? (
+              <button
+                onClick={handleLogout}
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
+              >
+                <LogOut size={16} />
+                Sign Out
+              </button>
+            ) : (
+              <button
+                onClick={() => (window.location.href = "/login")}
+                className="flex items-center gap-1.5 rounded-md px-3 py-1.5 text-sm font-medium text-gray-600 hover:bg-gray-100 hover:text-gray-900 transition"
+              >
+                <LogIn size={16} />
+                Sign In
+              </button>
+            )}
           </div>
 
           {/* Mobile menu button */}
@@ -97,7 +108,7 @@ export default function Header() {
                   href={item.href}
                   className={`flex items-center gap-2 rounded-md px-3 py-2 text-sm ${
                     isActive
-                      ? "bg-blue-50 text-blue-700"
+                      ? " bg-[#0A2D53] text-white"
                       : "text-gray-600 hover:bg-gray-100"
                   }`}
                   onClick={() => setMobileMenuOpen(false)}

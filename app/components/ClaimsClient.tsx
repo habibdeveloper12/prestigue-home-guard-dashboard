@@ -71,7 +71,7 @@ export default function ClaimsClient({
             </div>
             <Link
               href="/claims/new"
-              className="inline-flex items-center gap-2 rounded-lg bg-blue-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
+              className="inline-flex items-center gap-2 rounded-lg  bg-[#0A2D53] text-white px-4 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700"
             >
               <FileText size={16} />
               Start a New Claim
@@ -101,7 +101,7 @@ export default function ClaimsClient({
                       Claim Date
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
-                      Subject / Appliance
+                      Claim Type
                     </th>
                     <th className="px-6 py-3 text-left text-xs font-medium uppercase tracking-wider text-gray-500">
                       Status
@@ -127,7 +127,7 @@ export default function ClaimsClient({
                       >
                         <td
                           onClick={() => setSelectedClaim(c)}
-                          className="whitespace-nowrap px-6 py-4 text-sm font-medium text-blue-600 hover:underline"
+                          className="whitespace-nowrap px-6 py-4 text-sm font-medium text-[#0A2D53] hover:underline"
                         >
                           {c.Claim_ID_No || c.Case_Number}
                         </td>
@@ -135,7 +135,7 @@ export default function ClaimsClient({
                           {new Date(c.Created_Time).toLocaleString()}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm text-gray-700">
-                          {c.Subject || "—"}
+                          {c.Claim_Type || "—"}
                         </td>
                         <td className="whitespace-nowrap px-6 py-4 text-sm">
                           {getStatusBadge(c.Status)}

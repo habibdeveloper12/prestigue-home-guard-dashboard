@@ -100,7 +100,7 @@ export default function ForgotPolicyPage() {
                   href="https://policies.google.com/privacy"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-[#0A2D53] hover:underline"
                 >
                   Privacy Policy
                 </a>{" "}
@@ -109,7 +109,7 @@ export default function ForgotPolicyPage() {
                   href="https://policies.google.com/terms"
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="text-blue-600 hover:underline"
+                  className="text-[#0A2D53] hover:underline"
                 >
                   Terms of Service
                 </a>{" "}
@@ -132,7 +132,7 @@ export default function ForgotPolicyPage() {
             <div className="text-center">
               <div className="mx-auto mb-4 flex h-12 w-12 items-center justify-center rounded-full bg-green-100">
                 <svg
-                  className="h-6 w-6 text-green-600"
+                  className="h-6 w-6 text-[#0A2D53]"
                   fill="none"
                   stroke="currentColor"
                   viewBox="0 0 24 24"
@@ -159,7 +159,7 @@ export default function ForgotPolicyPage() {
           <div className="mt-6 text-center">
             <Link
               href="/login"
-              className="inline-flex items-center gap-1 text-sm font-medium text-blue-600 hover:text-blue-800 hover:underline"
+              className="inline-flex items-center gap-1 text-sm font-medium text-[#0A2D53] hover:text-blue-800 hover:underline"
             >
               <ArrowLeft size={14} />
               Back to Sign In

@@ -154,7 +154,7 @@ export default function ClaimDetailsModal({
                     {claim.Related_Policy.name}
                   </p>
                   <p className="text-xs text-gray-500">
-                    ID: {claim.Related_Policy.id}
+                    {/* ID: {claim.Related_Policy.id} */}
                   </p>
                 </div>
               ) : (
@@ -171,7 +171,7 @@ export default function ClaimDetailsModal({
                     {claim.Contact_Name.name}
                   </p>
                   <p className="text-xs text-gray-500">
-                    ID: {claim.Contact_Name.id}
+                    {/* ID: {claim.Contact_Name.id} */}
                   </p>
                 </div>
               ) : (
@@ -191,12 +191,12 @@ export default function ClaimDetailsModal({
               </p>
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">
+              {/* <p className="text-sm font-medium text-gray-500">
                 Total Claim Cost
               </p>
               <p className="text-sm text-gray-900">
                 ${claim.Total_claim_cost || "0"}
-              </p>
+              </p> */}
             </div>
             <div>
               <p className="text-sm font-medium text-gray-500">Owner</p>

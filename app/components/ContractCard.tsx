@@ -31,7 +31,7 @@ export default function ContractCard({ deal }: ContractCardProps) {
         <h3 className="text-lg font-semibold text-gray-800">My Contracts</h3>
         <button
           onClick={() => router.push("/claims/new")}
-          className="rounded-lg bg-blue-600 px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
+          className="rounded-lg bg-[#0A2D53] text-white px-4 py-2 text-sm font-medium text-white transition hover:bg-blue-700"
         >
           Start a New Claim
         </button>
@@ -39,7 +39,7 @@ export default function ContractCard({ deal }: ContractCardProps) {
 
       <div className="flex flex-wrap items-center justify-between gap-4 rounded-xl bg-gray-50 p-4">
         <div className="flex items-center gap-4">
-          <div className="rounded-full bg-blue-100 p-2 text-blue-600">
+          <div className="rounded-full bg-blue-100 p-2 text-[#0A2D53]">
             <DollarSign size={24} />
           </div>
           <div>
@@ -60,7 +60,7 @@ export default function ContractCard({ deal }: ContractCardProps) {
               {startDate} - {endDate}
             </p>
             {freeMonths && (
-              <p className="text-xs text-green-600">({freeMonths})</p>
+              <p className="text-xs text-[#0A2D53]">({freeMonths})</p>
             )}
           </div>
         </div>

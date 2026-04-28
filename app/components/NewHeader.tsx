@@ -59,11 +59,11 @@ export default function NewHeader() {
             <a href="tel:+18889706181" className="flex items-center gap-2">
               {/* Circle with phone icon – matches the "stacked" view and border-radius 33px */}
               <span className="flex items-center justify-center h-[50px] w-[50px] rounded-full bg-[#082D53] text-white">
-                <Phone size={18} />
+                <Phone size={20} />
               </span>
               <div className="ml-2">
-                <h3 className="text-sm text-black font-bold leading-tight">
-                  24/7 CUSTOMER SERVICES
+                <h3 className="text-md text-black font-bold leading-tight">
+                  24/7 CUSTOMER <br /> SERVICES
                 </h3>
                 <p className="text-xs text-black">(888) 970-6181</p>
               </div>
@@ -71,7 +71,7 @@ export default function NewHeader() {
           </div>
 
           {/* GET A FREE QUOTE button – Column 4 (hidden on mobile) */}
-          <div className="hidden md:block w-[41%] pt-[35px]">
+          <div className="hidden text-center md:block w-[41%] pt-[5px]">
             <a
               href="https://prestigehomeguard.com/get-free-consultation/" target="_blank" rel="noopener noreferrer"
               className="inline-block rounded border border-[#FFD974] bg-[#FFD974] px-[22px] py-[12px] text-sm font-semibold text-[#082D53] hover:bg-gray-100"

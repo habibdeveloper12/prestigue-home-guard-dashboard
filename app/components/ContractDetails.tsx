@@ -74,7 +74,7 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
         <h2 className="text-lg font-semibold text-gray-800">
           Contract #{policyNumber}
         </h2>
-        <span className="rounded-full bg-blue-50 px-3 py-1 text-sm font-medium text-blue-700">
+        <span className="rounded-full  bg-[#227fe258] text-base px-3 py-1 text-sm font-medium text-blue-700">
           Property, Coverage & Rate Information
         </span>
       </div>
@@ -94,7 +94,7 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
                 {item.isLink ? (
                   <button
                     onClick={() => setIsModalOpen(true)}
-                    className="text-sm font-medium text-blue-600 hover:underline"
+                    className="text-sm font-medium text-[#0A2D53] hover:underline"
                   >
                     {item.value}
                   </button>
@@ -102,7 +102,7 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
                   <p
                     className={`text-base ${
                       item.badge
-                        ? "font-semibold text-green-600"
+                        ? "font-semibold text-[#0A2D53]"
                         : "text-gray-800"
                     }`}
                   >
@@ -118,7 +118,7 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
       <div className="mt-6 border-t border-gray-100 pt-4">
         <button
           onClick={() => setIsModalOpen(true)}
-          className="text-sm font-medium text-blue-600 hover:underline"
+          className="text-sm font-medium text-[#0A2D53] hover:underline"
         >
           What's Covered? →
         </button>
