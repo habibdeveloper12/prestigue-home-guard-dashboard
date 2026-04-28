@@ -98,8 +98,8 @@ export default function Footer() {
         <div className="mx-auto max-w-[1350px]">
           <div className="grid grid-cols-1 md:grid-cols-2 gap-8 border-b border-white/20 pb-10">
             {/* Left column – Company info */}
-            <div className=" w-2/3 sm:w-full flex flex-col justify-top">
-              <h2 className="font-['Poppins'] sm:text-center md:text-left text-[40px] font-bold text-white mb-2">
+            <div className=" md:w-2/3 sm:w-full flex flex-col justify-top">
+              <h2 className="font-['Poppins'] text-center md:text-left text-[40px] font-bold text-white mb-2">
                 Prestige Home Guard
               </h2>
               <p className="font-['Poppins'] sm:text-center md:text-left text-[15px] leading-relaxed text-white/70 mb-6">
