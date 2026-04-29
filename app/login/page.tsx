@@ -36,12 +36,11 @@ export default function LoginPage() {
         <div className="mb-8 text-center">
           <Link href="/" className="flex items-center gap-2">
             <img
-              src="https://i.ibb.co.com/67Tmwmqn/PHG-Logo.png"
+              src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png"
               alt="Prestige Home Guard"
               width={400}
               height={100}
               className="mx-auto h-auto w-full max-w-xs"
-            
             />
           </Link>
         </div>
@@ -107,7 +106,7 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-lg bg-blue-600 px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+              className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
             >
               {isLoading ? "Signing in..." : "Sign in"}
             </button>
@@ -116,7 +115,7 @@ export default function LoginPage() {
           <div className="mt-4 text-center">
             <Link
               href="/forgot-policy"
-              className="text-sm font-medium text-blue-600 hover:underline"
+              className="text-sm font-medium text-[#0A2D53] hover:underline"
             >
               Forgot Policy #
             </Link>

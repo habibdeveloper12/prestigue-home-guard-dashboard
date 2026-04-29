@@ -72,7 +72,7 @@ export default function ProfileForm({
       <div className="mb-6 border-b border-gray-100 pb-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-500">
-            Contract Number:
+            Policy Number:
           </span>
           <span className="text-lg font-semibold text-gray-900">
             {policyNumber}
@@ -100,6 +100,7 @@ export default function ProfileForm({
               value={formData.email}
               onChange={handleChange}
               required
+              disabled
               className="block w-full rounded-lg border border-gray-300 py-2.5 pl-10 pr-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
           </div>
@@ -241,6 +242,7 @@ export default function ProfileForm({
               name="coverageAddress"
               value={formData.coverageAddress}
               onChange={handleChange}
+              disabled
               className="mt-1 block w-full rounded-lg border border-gray-300 py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
             />
           </div>
@@ -254,6 +256,7 @@ export default function ProfileForm({
             <input
               type="text"
               id="coverageAddressCityZip"
+              disabled
               name="coverageAddressCityZip"
               value={formData.coverageAddressCityZip}
               onChange={handleChange}
