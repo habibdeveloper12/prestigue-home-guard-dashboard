@@ -26,6 +26,7 @@ export default function LoginPage() {
       setIsLoading(false);
     } else {
       router.push("/");
+      window.location.reload(); // Force full page reload to reset state and fetch new data
       router.refresh();
     }
   };

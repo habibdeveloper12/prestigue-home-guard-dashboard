@@ -107,14 +107,14 @@ export default function ClaimDetailsModal({
             <p className="text-base text-gray-900">{claim.Subject || "—"}</p>
           </div>
 
-          <div>
+          {/* <div>
             <h3 className="text-sm font-medium text-gray-500 mb-1">
               Description
             </h3>
             <p className="text-sm text-gray-700 whitespace-pre-wrap">
               {claim.Description || "No description provided."}
             </p>
-          </div>
+          </div> */}
 
           {/* Dates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -199,10 +199,10 @@ export default function ClaimDetailsModal({
               </p> */}
             </div>
             <div>
-              <p className="text-sm font-medium text-gray-500">Owner</p>
+              {/* <p className="text-sm font-medium text-gray-500">Owner</p>
               <p className="text-sm text-gray-900">
                 {claim.Owner?.name || "—"}
-              </p>
+              </p> */}
             </div>
           </div>
 
