@@ -10,6 +10,7 @@ export interface ZohoContact {
   Mailing_City?: string;
   Mailing_State?: string;
   Mailing_Zip?: string;
+  Forget_Id_Request?: number;
 }
 
 export async function getContactById(
@@ -17,6 +18,19 @@ export async function getContactById(
 ): Promise<ZohoContact | null> {
   const result = await zohoRequest(`/Contacts/${contactId}`);
   return result.data?.[0] || null;
+}
+
+export async function getContactByEmail(
+  email: string,
+): Promise<ZohoContact | null> {
+  try {
+    const result = await zohoRequest(
+      `/Contacts/search?criteria=(Email:equals:${encodeURIComponent(email)})`,
+    );
+    return result?.data?.[0] || null;
+  } catch {
+    return null;
+  }
 }
 
 export async function updateContact(

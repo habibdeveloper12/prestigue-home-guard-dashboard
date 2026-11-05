@@ -1,7 +1,7 @@
 // app/auth.ts
 import NextAuth from "next-auth";
 import CredentialsProvider from "next-auth/providers/credentials";
-import { findDealByEmailAndPolicy } from "../lib/zoho/deals"; // adjust path if needed
+import { findDealByEmailAndPolicy, isDealActive } from "../lib/zoho/deals"; // adjust path if needed
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -19,6 +19,10 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         const deal = await findDealByEmailAndPolicy(email, policyNumber);
         if (!deal) return null;
+
+        // Only active policies/deals can sign in (enforced here too, so the
+        // NextAuth endpoint can't be called directly to bypass the check)
+        if (!isDealActive(deal)) return null;
 
         // Return an object that matches the NextAuth User type
         return {

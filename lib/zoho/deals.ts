@@ -11,7 +11,20 @@ export interface ZohoDeal {
   Stage?: string;
   Service_Call_Fee?: number;
   Contact_Name?: { id: string; name: string };
+  Forget_Id_Req_Count?: number;
   // Add other fields as needed
+}
+
+// Deal stages that are allowed to log in to the dashboard.
+// Override with a comma-separated env var, e.g. ACTIVE_DEAL_STAGES="Active,Renewed"
+const ACTIVE_DEAL_STAGES = (process.env.ACTIVE_DEAL_STAGES || "Active")
+  .split(",")
+  .map((s) => s.trim().toLowerCase())
+  .filter(Boolean);
+
+export function isDealActive(deal: ZohoDeal | null | undefined): boolean {
+  if (!deal?.Stage) return false;
+  return ACTIVE_DEAL_STAGES.includes(deal.Stage.trim().toLowerCase());
 }
 
 export async function findDealByEmailAndPolicy(

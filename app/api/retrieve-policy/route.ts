@@ -1,5 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { Resend } from "resend";
+import { updateDeal, type ZohoDeal } from "@/lib/zoho/deals";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -29,16 +30,30 @@ export async function POST(request: NextRequest) {
     // 2. Fetch deals by email (helper below)
     const deals = await getDealsByEmail(email);
     if (!deals || deals.length === 0) {
-      // Don't reveal whether the email exists
-      return NextResponse.json({ success: true });
+      return NextResponse.json(
+        {
+          error:
+            "We don't have any record with this email in our system. Please contact support for assistance.",
+        },
+        { status: 404 },
+      );
     }
 
+    // 3. Bump the Forget_Id_Req_Count counter on each matching deal
+    await Promise.all(
+      deals.map((deal: ZohoDeal) =>
+        updateDeal(deal.id, {
+          Forget_Id_Req_Count: (Number(deal.Forget_Id_Req_Count) || 0) + 1,
+        }),
+      ),
+    );
+
     const policies = deals
-      .map((deal: any) => deal.Policy_Number)
+      .map((deal: ZohoDeal) => deal.Policy_Number)
       .filter(Boolean)
       .join(", ");
 
-    // 3. Send professional email
+    // 5. Send professional email
     await resend.emails.send({
       from: "Prestige Home Guard <noreply@prestigehomeguard.com>",
       to: [email],
