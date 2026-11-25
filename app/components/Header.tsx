@@ -24,6 +24,11 @@ export default function Header() {
     await signOut({ callbackUrl: "/login" });
   };
 
+  // Logged-out pages (login, forgot policy) show only the website header: the app navigation is for signed-in customers.
+  if (!session?.user && (pathname === "/login" || pathname.startsWith("/forgot-policy"))) {
+    return null;
+  }
+
   return (
     <header className="border-b border-gray-200 bg-white">
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">

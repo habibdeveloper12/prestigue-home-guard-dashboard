@@ -1,12 +1,17 @@
 import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import { Poppins } from "next/font/google";
 import "./globals.css";
+import "./portal-brand.css";
 import Header from "./components/Header";
 import { SessionProvider } from "next-auth/react";
-import NewHeader from "./components/NewHeader";
-import Footer from "./components/Footer";
+import { SiteHeader, SiteFooter } from "./components/SiteChrome";
 
-const inter = Inter({ subsets: ["latin"] });
+// Same typeface as prestigehomeguard.com (design sync)
+const poppins = Poppins({
+  subsets: ["latin"],
+  weight: ["400", "500", "600", "700"],
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Home Warranty Dashboard",
@@ -16,8 +21,6 @@ export const metadata: Metadata = {
   },
 };
 
-
-
 export default function RootLayout({
   children,
 }: {
@@ -25,12 +28,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body suppressHydrationWarning>
+      <body className={poppins.className} suppressHydrationWarning>
         <SessionProvider>
-          {/* <Header /> */}
-          <NewHeader />
+          {/* Shared website header/footer (source: prestigehomeguard.com feed) */}
+          <SiteHeader />
+          {/* Portal application navigation (unchanged) */}
+          <Header />
           <main>{children}</main>
-          <Footer/>
+          <SiteFooter />
         </SessionProvider>
       </body>
     </html>

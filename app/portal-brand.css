@@ -1,0 +1,26 @@
+/* PHG portal brand sync (PORTAL-001). Plain CSS, no dependencies. Colours/typography match prestigehomeguard.com. */
+:root{--phg-navy:#082D53;--phg-gold:#FFC947;--phg-gold-2:#FFD974;--phg-bg:#F4F6F9}
+html,body{font-family:Poppins,system-ui,-apple-system,'Segoe UI',sans-serif} /* load Poppins via next/font (weights 400,500,600,700) in the root layout */
+/* Header */
+.phg-hdr{background:#fff;border-bottom:1px solid #E3E7ED}
+.phg-hdr-top{max-width:1320px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.phg-hdr-logo{display:block;width:190px;height:auto}
+.phg-hdr-right{display:flex;align-items:center;gap:20px}
+.phg-hdr-phone{display:flex;flex-direction:column;line-height:1.25;color:var(--phg-navy);text-decoration:none;font-size:12px}
+.phg-hdr-phone strong{font-size:16px}
+.phg-btn{display:inline-block;background:var(--phg-gold);color:var(--phg-navy);font-weight:600;padding:12px 22px;border-radius:10px;text-decoration:none}
+.phg-btn:hover{background:var(--phg-gold-2)}
+.phg-hdr-nav{background:var(--phg-bg)}
+.phg-hdr-nav ul{list-style:none;margin:0 auto;padding:0 24px;max-width:1320px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
+.phg-hdr-nav li{position:relative}
+.phg-hdr-nav a{display:block;padding:12px 0;color:var(--phg-navy);font-weight:500;text-decoration:none}
+.phg-hdr-nav a:hover{text-decoration:underline;text-underline-offset:4px}
+.phg-hdr-nav .phg-sub{display:none;position:absolute;left:0;top:100%;min-width:220px;background:#fff;border:1px solid #E3E7ED;border-radius:10px;padding:8px 16px!important;flex-direction:column;gap:0!important;z-index:20}
+.phg-hdr-nav li:hover>.phg-sub,.phg-hdr-nav li:focus-within>.phg-sub{display:flex}
+@media (max-width:767px){.phg-hdr-top{padding:10px 16px}.phg-hdr-logo{width:150px}.phg-hdr-phone{display:none}.phg-hdr-nav ul{gap:6px 18px;justify-content:flex-start;padding:0 16px}.phg-hdr-nav .phg-sub{display:none!important}}
+/* Login page: remove the large empty space and the duplicate logo above the card (the header already carries the logo) */
+.phg-login-main{min-height:0!important;padding:48px 16px 72px!important;align-items:center!important;justify-content:flex-start!important}
+.phg-login-main .phg-login-logo{display:none}
+@media (max-width:767px){.phg-login-main{padding:28px 16px 56px!important}}
+/* Buttons never underlined (site standard) */
+a.phg-btn,a.phg-btn:hover,a.phg-btn:focus{text-decoration:none}

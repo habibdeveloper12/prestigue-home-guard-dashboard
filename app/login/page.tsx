@@ -32,9 +32,9 @@ export default function LoginPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="phg-login-main flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+        <div className="phg-login-logo mb-8 text-center">
           <Link href="/" className="flex items-center gap-2">
             <img
               src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png"
