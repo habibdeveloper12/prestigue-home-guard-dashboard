@@ -1,23 +1,39 @@
-import { NextRequest, NextResponse } from "next/server";
+import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
-import { updateDeal, type ZohoDeal } from "@/lib/zoho/deals";
+import { findDealsByEmail, updateDeal } from "@/lib/zoho/deals";
+import { cleanEmail } from "@/lib/validate";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
 export async function POST(request: NextRequest) {
   try {
-    const { email, recaptchaToken } = await request.json();
+    const body = await request.json();
+    const recaptchaToken = body?.recaptchaToken;
+    const email = cleanEmail(body?.email);
 
-    if (!email || !recaptchaToken) {
+    if (!body?.email || !recaptchaToken) {
       return NextResponse.json(
         { error: "Email and reCAPTCHA are required." },
         { status: 400 },
       );
     }
+    if (!email) {
+      return NextResponse.json(
+        { error: "Please enter a valid email address." },
+        { status: 400 },
+      );
+    }
 
-    // 1. Verify reCAPTCHA
-    const verifyUrl = `https://www.google.com/recaptcha/api/siteverify?secret=${process.env.RECAPTCHA_SECRET_KEY}&response=${recaptchaToken}`;
-    const recaptchaRes = await fetch(verifyUrl, { method: "POST" });
+    // 1. Verify reCAPTCHA (the secret goes in the request body, not the address)
+    const recaptchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
+      method: "POST",
+      cache: "no-store",
+      headers: { "Content-Type": "application/x-www-form-urlencoded" },
+      body: new URLSearchParams({
+        secret: process.env.RECAPTCHA_SECRET_KEY ?? "",
+        response: String(recaptchaToken),
+      }),
+    });
     const recaptchaData = await recaptchaRes.json();
 
     if (!recaptchaData.success) {
@@ -27,43 +43,13 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 2. Fetch deals by email (helper below)
-    const deals = await getDealsByEmail(email);
-    if (!deals || deals.length === 0) {
-      return NextResponse.json(
-        {
-          error:
-            "We couldn't find a policy for this email address. Please call (888) 970-6181 for help.",
-        },
-        { status: 404 },
-      );
-    }
-
-    // 3. Bump the Forget_Id_Req_Count counter on each matching deal
-    await Promise.all(
-      deals.map((deal: ZohoDeal) =>
-        updateDeal(deal.id, {
-          Forget_Id_Req_Count: (Number(deal.Forget_Id_Req_Count) || 0) + 1,
-        }),
-      ),
-    );
-
-    const policies = deals
-      .map((deal: ZohoDeal) => deal.Policy_Number)
-      .filter(Boolean)
-      .join(", ");
-
-    // 5. Send professional email
-    await resend.emails.send({
-      from: "Prestige Home Guard <noreply@prestigehomeguard.com>",
-      to: [email],
-      subject: "Your Policy Number",
-      html: buildEmailTemplate(email, policies),
-    });
+    // 2. Look up and send after replying, so the answer is the same (and as fast)
+    //    whether or not the email address has a policy.
+    after(() => sendPolicyNumbers(email));
 
     return NextResponse.json({ success: true });
-  } catch (error) {
-    console.error("Retrieve policy error:", error);
+  } catch {
+    console.error("Retrieve policy request failed");
     return NextResponse.json(
       { error: "Something went wrong. Please try again later." },
       { status: 500 },
@@ -71,16 +57,33 @@ export async function POST(request: NextRequest) {
   }
 }
 
-// Helper: fetch deals by email (no policy number required)
-async function getDealsByEmail(email: string) {
-  const { zohoRequest } = await import("@/lib/zoho/client");
+async function sendPolicyNumbers(email: string) {
   try {
-    const result = await zohoRequest(
-      `/Deals/search?criteria=(Email:equals:${encodeURIComponent(email)})`,
+    const deals = await findDealsByEmail(email);
+    const policies = deals
+      .map((deal) => deal.Policy_Number)
+      .filter(Boolean)
+      .join(", ");
+    if (!policies) return;
+
+    const { error } = await resend.emails.send({
+      from: "Prestige Home Guard <noreply@prestigehomeguard.com>",
+      to: [email],
+      subject: "Your Policy Number",
+      html: buildEmailTemplate(email, policies),
+    });
+    if (error) console.error("Policy number email was not sent");
+
+    // Bump the Forget_Id_Req_Count counter on each matching deal
+    await Promise.all(
+      deals.map((deal) =>
+        updateDeal(deal.id, {
+          Forget_Id_Req_Count: (Number(deal.Forget_Id_Req_Count) || 0) + 1,
+        }),
+      ),
     );
-    return result?.data || [];
   } catch {
-    return [];
+    console.error("Policy number lookup failed");
   }
 }
 

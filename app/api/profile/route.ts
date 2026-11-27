@@ -12,7 +12,6 @@ export async function PUT(request: NextRequest) {
 
   const body = await request.json();
   const {
-    dealId,
     email,
     homePhone,
     workPhone,
@@ -24,9 +23,8 @@ export async function PUT(request: NextRequest) {
     coverageAddressCityZip,
   } = body;
 
-  if (dealId !== session.user.dealId) {
-    return NextResponse.json({ error: "Forbidden" }, { status: 403 });
-  }
+  // The record to update always comes from the signed-in session, never from the browser.
+  const dealId = session.user.dealId;
 
   try {
     const deal = await getDealById(dealId);
@@ -35,7 +33,7 @@ export async function PUT(request: NextRequest) {
     }
 
     // Update Contact
-    const updatedContact = await updateContact(deal.Contact_Name.id, {
+    await updateContact(deal.Contact_Name.id, {
       Email: email,
       Phone: homePhone,
       Home_Phone: workPhone,
@@ -46,17 +44,14 @@ export async function PUT(request: NextRequest) {
     });
 
     // Update Deal fields
-    const updatedDeal = await updateDeal(dealId, {
+    await updateDeal(dealId, {
       Coverage_Address: coverageAddress,
       Coverage_Address_City_Postcode: coverageAddressCityZip,
     });
 
-    return NextResponse.json({
-      success: true,
-      contact: updatedContact,
-      deal: updatedDeal,
-    });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch {
+    console.error("Profile update failed");
+    return NextResponse.json({ error: "We couldn't update your profile." }, { status: 500 });
   }
 }

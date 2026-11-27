@@ -36,9 +36,17 @@ export default async function ProfilePage() {
 
         <ProfileForm
           policyNumber={deal.Policy_Number}
-          contact={contact}
-          dealId={deal.id}
-          deal={deal}
+          initialValues={{
+            email: contact?.Email || "",
+            homePhone: contact?.Phone || "",
+            workPhone: contact?.Home_Phone || "",
+            mailingAddress: contact?.Mailing_Street || "",
+            mailingCity: contact?.Mailing_City || "",
+            mailingState: contact?.Mailing_State || "",
+            mailingZip: contact?.Mailing_Zip || "",
+            coverageAddress: deal.Coverage_Address || "",
+            coverageAddressCityZip: deal.Coverage_Address_City_Postcode || "",
+          }}
         />
       </div>
     </div>

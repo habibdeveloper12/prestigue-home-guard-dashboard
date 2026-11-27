@@ -5,28 +5,21 @@ import { Mail, Phone, Home } from "lucide-react";
 
 interface ProfileFormProps {
   policyNumber?: string;
-  contact: any; // Replace with proper ZohoContact type
-  dealId: string;
-  deal: any; // Replace with proper ZohoDeal type
+  initialValues: {
+    email: string;
+    homePhone: string;
+    workPhone: string;
+    mailingAddress: string;
+    mailingCity: string;
+    mailingState: string;
+    mailingZip: string;
+    coverageAddress: string;
+    coverageAddressCityZip: string;
+  };
 }
 
-export default function ProfileForm({
-  policyNumber,
-  contact,
-  dealId,
-  deal,
-}: ProfileFormProps) {
-  const [formData, setFormData] = useState({
-    email: contact?.Email || "",
-    homePhone: contact?.Phone || "",
-    workPhone: contact?.Home_Phone || "",
-    mailingAddress: contact?.Mailing_Street || "",
-    mailingCity: contact?.Mailing_City || "",
-    mailingState: contact?.Mailing_State || "",
-    mailingZip: contact?.Mailing_Zip || "",
-    coverageAddress: deal?.Coverage_Address || "",
-    coverageAddressCityZip: deal?.Coverage_Address_City_Postcode || "",
-  });
+export default function ProfileForm({ policyNumber, initialValues }: ProfileFormProps) {
+  const [formData, setFormData] = useState(initialValues);
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [successMessage, setSuccessMessage] = useState("");
   const [error, setError] = useState("");
@@ -45,16 +38,11 @@ export default function ProfileForm({
       const response = await fetch("/api/profile", {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({
-          dealId,
-          ...formData,
-        }),
+        body: JSON.stringify(formData),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Update failed");
+        throw new Error("Update failed");
       }
 
       setSuccessMessage("Your profile has been updated.");

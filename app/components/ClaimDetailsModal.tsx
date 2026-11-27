@@ -70,7 +70,7 @@ export default function ClaimDetailsModal({
         {/* Header */}
         <div className="sticky top-0 flex items-center justify-between border-b border-gray-200 bg-white px-6 py-4 rounded-t-2xl">
           <h2 className="text-xl font-semibold text-gray-900">
-            Claim Details: {claim.Claim_ID_No || claim.Case_Number}
+            Claim Details: {claim.Claim_ID_No}
           </h2>
           <button
             onClick={onClose}
@@ -109,15 +109,6 @@ export default function ClaimDetailsModal({
             <p className="text-base text-gray-900">{claim.Subject || "—"}</p>
           </div>
 
-          {/* <div>
-            <h3 className="text-sm font-medium text-gray-500 mb-1">
-              Description
-            </h3>
-            <p className="text-sm text-gray-700 whitespace-pre-wrap">
-              {claim.Description || "No description provided."}
-            </p>
-          </div> */}
-
           {/* Dates */}
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div className="flex items-start gap-2">
@@ -155,9 +146,6 @@ export default function ClaimDetailsModal({
                   <p className="font-medium text-gray-900">
                     {claim.Related_Policy.name}
                   </p>
-                  <p className="text-xs text-gray-500">
-                    {/* ID: {claim.Related_Policy.id} */}
-                  </p>
                 </div>
               ) : (
                 <p className="text-sm text-gray-500">—</p>
@@ -171,9 +159,6 @@ export default function ClaimDetailsModal({
                 <div className="bg-gray-50 rounded-lg p-3">
                   <p className="font-medium text-gray-900">
                     {claim.Contact_Name.name}
-                  </p>
-                  <p className="text-xs text-gray-500">
-                    {/* ID: {claim.Contact_Name.id} */}
                   </p>
                 </div>
               ) : (
@@ -192,41 +177,7 @@ export default function ClaimDetailsModal({
                 {formatMoney(claim.Service_Call_Fee_Amount || 0)}
               </p>
             </div>
-            <div>
-              {/* <p className="text-sm font-medium text-gray-500">
-                Total Claim Cost
-              </p>
-              <p className="text-sm text-gray-900">
-                ${claim.Total_claim_cost || "0"}
-              </p> */}
-            </div>
-            <div>
-              {/* <p className="text-sm font-medium text-gray-500">Owner</p>
-              <p className="text-sm text-gray-900">
-                {claim.Owner?.name || "—"}
-              </p> */}
-            </div>
           </div>
-
-          {/* Comments (if any) */}
-          {claim.Comments && claim.Comments.length > 0 && (
-            <div className="pt-4 border-t border-gray-100">
-              <h3 className="text-sm font-medium text-gray-500 mb-2">
-                Comments
-              </h3>
-              <div className="space-y-2">
-                {claim.Comments.map((comment: any, idx: number) => (
-                  <div key={idx} className="bg-gray-50 rounded-lg p-3">
-                    <p className="text-sm text-gray-700">{comment.content}</p>
-                    <p className="text-xs text-gray-500 mt-1">
-                      {comment.created_by} -{" "}
-                      {formatDateTime(comment.created_time)}
-                    </p>
-                  </div>
-                ))}
-              </div>
-            </div>
-          )}
         </div>
       </div>
     </div>

@@ -158,8 +158,8 @@ export default function ForgotPolicyPage() {
                 Check your email
               </h3>
               <p className="mt-2 text-sm text-gray-600">
-                If an account exists for {email}, we&rsquo;ve sent your policy
-                number to that address.
+                If a policy exists for this email, we&rsquo;ve sent the policy
+                number.
               </p>
             </div>
           )}

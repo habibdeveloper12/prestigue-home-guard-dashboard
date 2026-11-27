@@ -33,7 +33,7 @@ ${description}
 
     const subject = `${system} - ${issue.substring(0, 50)}`;
 
-    const result = await zohoRequest("/Cases", {
+    await zohoRequest("/Cases", {
       method: "POST",
       body: JSON.stringify({
         trigger: ["workflow", "approval", "blueprint"],
@@ -53,8 +53,9 @@ ${description}
       }),
     });
 
-    return NextResponse.json({ success: true, case: result.data[0] });
-  } catch (error: any) {
-    return NextResponse.json({ error: error.message }, { status: 500 });
+    return NextResponse.json({ success: true });
+  } catch {
+    console.error("Claim submission failed");
+    return NextResponse.json({ error: "We couldn't submit your claim." }, { status: 500 });
   }
 }

@@ -47,9 +47,9 @@ export default function ClaimsClient({ cases, policyNumber }: ClaimsClientProps)
       type="button"
       onClick={() => setSelectedClaim(c)}
       className="cursor-pointer font-semibold text-[#082D53] underline underline-offset-4"
-      aria-label={`View details for claim ${c.Claim_ID_No || c.Case_Number}`}
+      aria-label={`View details for claim ${c.Claim_ID_No}`}
     >
-      {c.Claim_ID_No || c.Case_Number}
+      {c.Claim_ID_No}
     </button>
   );
 
@@ -93,7 +93,7 @@ export default function ClaimsClient({ cases, policyNumber }: ClaimsClientProps)
                   </thead>
                   <tbody className="divide-y divide-gray-200">
                     {cases.map((c) => (
-                      <tr key={c.id} className="hover:bg-gray-50">
+                      <tr key={c.Claim_ID_No} className="hover:bg-gray-50">
                         <td className="whitespace-nowrap px-6 py-4 text-sm">{claimButton(c)}</td>
                         <td className="px-6 py-4 text-sm text-gray-700">{formatDateTime(c.Created_Time)}</td>
                         <td className="px-6 py-4 text-sm text-gray-700">{c.Claim_Type || "—"}</td>
@@ -106,7 +106,7 @@ export default function ClaimsClient({ cases, policyNumber }: ClaimsClientProps)
 
               <ul className="divide-y divide-gray-200 sm:hidden">
                 {cases.map((c) => (
-                  <li key={c.id} className="space-y-1 px-5 py-4 text-sm text-gray-700">
+                  <li key={c.Claim_ID_No} className="space-y-1 px-5 py-4 text-sm text-gray-700">
                     <div className="flex items-center justify-between gap-3">
                       {claimButton(c)}
                       {getStatusBadge(c.Status)}
