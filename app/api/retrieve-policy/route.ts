@@ -2,6 +2,7 @@ import { NextRequest, NextResponse, after } from "next/server";
 import { Resend } from "resend";
 import { findDealsByEmail, updateDeal } from "@/lib/zoho/deals";
 import { cleanEmail } from "@/lib/validate";
+import { verifyRecaptcha } from "@/lib/recaptcha";
 
 const resend = new Resend(process.env.RESEND_API_KEY);
 
@@ -24,19 +25,8 @@ export async function POST(request: NextRequest) {
       );
     }
 
-    // 1. Verify reCAPTCHA (the secret goes in the request body, not the address)
-    const recaptchaRes = await fetch("https://www.google.com/recaptcha/api/siteverify", {
-      method: "POST",
-      cache: "no-store",
-      headers: { "Content-Type": "application/x-www-form-urlencoded" },
-      body: new URLSearchParams({
-        secret: process.env.RECAPTCHA_SECRET_KEY ?? "",
-        response: String(recaptchaToken),
-      }),
-    });
-    const recaptchaData = await recaptchaRes.json();
-
-    if (!recaptchaData.success) {
+    // 1. Verify reCAPTCHA
+    if (!(await verifyRecaptcha(recaptchaToken))) {
       return NextResponse.json(
         { error: "reCAPTCHA verification failed. Please try again." },
         { status: 400 },

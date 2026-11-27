@@ -1,6 +1,7 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
+import ReCAPTCHA from "react-google-recaptcha";
 import { useRouter } from "next/navigation";
 import { authenticate } from "@/app/actions/auth";
 import Link from "next/link";
@@ -12,18 +13,27 @@ export default function LoginPage() {
   const [policyNumber, setPolicyNumber] = useState("");
   const [error, setError] = useState("");
   const [isLoading, setIsLoading] = useState(false);
+  const [recaptchaToken, setRecaptchaToken] = useState<string | null>(null);
+  const recaptchaRef = useRef<ReCAPTCHA>(null);
   const router = useRouter();
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
+    if (!recaptchaToken) {
+      setError("Please confirm you are not a robot.");
+      return;
+    }
     setIsLoading(true);
     setError("");
 
-    const result = await authenticate(email, policyNumber);
+    const result = await authenticate(email, policyNumber, recaptchaToken);
 
     if (result?.error) {
       setError(result.error);
       setIsLoading(false);
+      // Each answer works once, so ask again for the next attempt.
+      recaptchaRef.current?.reset();
+      setRecaptchaToken(null);
     } else {
       router.push("/");
       window.location.reload(); // Force full page reload to reset state and fetch new data
@@ -101,8 +111,19 @@ export default function LoginPage() {
               </div>
             </div>
 
+            <div className="phg-captcha flex justify-center">
+              <ReCAPTCHA
+                ref={recaptchaRef}
+                sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
+                onChange={(token) => {
+                  setRecaptchaToken(token);
+                  if (token) setError("");
+                }}
+              />
+            </div>
+
             {error && (
-              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              <div role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
                 {error}
               </div>
             )}

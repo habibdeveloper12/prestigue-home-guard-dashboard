@@ -1,7 +1,19 @@
 // app/auth.ts
-import NextAuth from "next-auth";
+import NextAuth, { CredentialsSignin } from "next-auth";
+import { verifyRecaptcha } from "../lib/recaptcha";
 import CredentialsProvider from "next-auth/providers/credentials";
 import { findDealByEmailAndPolicy, isDealActive } from "../lib/zoho/deals"; // adjust path if needed
+
+// Reasons a sign-in is refused. The code tells the sign-in page which message to show.
+class RobotCheckFailed extends CredentialsSignin {
+  code = "robot";
+}
+class ContractCancelled extends CredentialsSignin {
+  code = "cancelled";
+}
+class PolicyInactive extends CredentialsSignin {
+  code = "inactive";
+}
 
 export const { handlers, auth, signIn, signOut } = NextAuth({
   providers: [
@@ -10,9 +22,15 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
       credentials: {
         email: { label: "Email", type: "email" },
         policyNumber: { label: "Policy Number", type: "text" },
+        recaptchaToken: { label: "reCAPTCHA", type: "text" },
       },
       async authorize(credentials) {
         if (!credentials?.email || !credentials?.policyNumber) return null;
+
+        // Checked here, before any lookup, so the sign-in address can't be called without it.
+        if (!(await verifyRecaptcha(credentials.recaptchaToken))) {
+          throw new RobotCheckFailed();
+        }
 
         const email = credentials.email as string;
         const policyNumber = credentials.policyNumber as string;
@@ -22,7 +40,9 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
 
         // Only active policies/deals can sign in (enforced here too, so the
         // NextAuth endpoint can't be called directly to bypass the check)
-        if (!isDealActive(deal)) return null;
+        if (!isDealActive(deal)) {
+          throw deal.Stage === "Cancelled" ? new ContractCancelled() : new PolicyInactive();
+        }
 
         // Return an object that matches the NextAuth User type
         return {

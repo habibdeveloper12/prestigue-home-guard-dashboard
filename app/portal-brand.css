@@ -136,3 +136,6 @@ a.phg-button:hover{text-decoration:none}
 .phg-login-main{min-height:55vh!important;padding:48px 16px 72px!important;align-items:center!important;justify-content:flex-start!important}
 .phg-login-main .phg-login-logo{display:none}
 @media (max-width:767px){.phg-login-main{padding:28px 16px 56px!important}}
+
+/* Keep the "I'm not a robot" box (304px wide) inside the card on very narrow phones */
+@media (max-width:399px){.phg-captcha{transform:scale(.8)}.phg-login-main .p-8{padding:24px 18px}}

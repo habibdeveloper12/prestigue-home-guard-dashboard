@@ -95,7 +95,7 @@ export default function ForgotPolicyPage() {
                 </div>
               </div>
 
-              <div className="flex justify-center">
+              <div className="phg-captcha flex justify-center">
                 <ReCAPTCHA
                   ref={recaptchaRef}
                   sitekey={process.env.NEXT_PUBLIC_RECAPTCHA_SITE_KEY!}
