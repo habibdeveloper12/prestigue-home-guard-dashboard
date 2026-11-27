@@ -4,15 +4,21 @@ import {
   FileText,
   Home,
   Calendar,
-  CheckCircle,
+  CalendarCheck,
   Shield,
+  ShieldPlus,
   DollarSign,
   Wrench,
   MapPin,
+  User,
+  ArrowRight,
 } from "lucide-react";
-import { useState } from "react";
+import Link from "next/link";
+import { useCallback, useState } from "react";
 import Modal from "./Modal/Modal";
 import CoverageModalContent from "./CoverageModalContent";
+import { formatDate, formatMoney } from "@/lib/format";
+import { planName } from "@/lib/plans";
 
 interface ContractDetailsProps {
   deal: any; // Replace with proper ZohoDeal type
@@ -20,6 +26,7 @@ interface ContractDetailsProps {
 
 export default function ContractDetails({ deal }: ContractDetailsProps) {
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const closeModal = useCallback(() => setIsModalOpen(false), []);
 
   // Map deal fields to display values
   const policyNumber = deal.Policy_Number || "N/A";
@@ -29,107 +36,110 @@ export default function ContractDetails({ deal }: ContractDetailsProps) {
   const fullAddress =
     `${coverageAddress}, ${coverageCityPostcode}`
       .trim()
-      .replace(/^, |, $/g, "") || "N/A";
+      .replace(/^, |, $|,$/g, "") || "N/A";
 
-  const startDate = deal.Start_Date
-    ? new Date(deal.Start_Date).toLocaleDateString("en-US")
-    : "N/A";
-  const endDate = deal.End_Date
-    ? new Date(deal.End_Date).toLocaleDateString("en-US")
-    : "N/A";
+  const startDate = formatDate(deal.Start_Date);
+  const endDate = formatDate(deal.End_Date);
   const freeMonths = deal.Free_Months
-    ? `(${deal.Free_Months} Free Months)`
+    ? `Includes ${deal.Free_Months} free ${Number(deal.Free_Months) === 1 ? "month" : "months"}`
     : "";
-  const contractTerm = `${startDate} - ${endDate} ${freeMonths}`.trim();
 
   const status = deal.Stage || "Active";
-  const coveragePlan = deal.Plan_Type || "Total Plan";
+  const coveragePlan = planName(deal.Plan_Type);
+  const propertyType = deal.Property_Type?.trim() || "Single Family";
   const optionalCoverage = deal.Optional_Coverage?.join(", ") || "None";
   const contractRate = deal.Total_Plan_Cost
-    ? `$${deal.Total_Plan_Cost.toLocaleString()}`
+    ? formatMoney(deal.Total_Plan_Cost)
     : "$0.00";
-  const serviceCallFee = deal.SCF
-    ? `$${deal.SCF}`
-    : "$00.00"; // default
+  const serviceCallFee = deal.SCF ? formatMoney(deal.SCF) : "N/A";
+  const orderDate = formatDate(deal.Sale_Date);
 
   const details = [
-    {
-      label: "Property Type",
-      value: "Single Family (Less than 5,000 sq.ft.)",
-      icon: Home,
-    }, // still static
-    { label: "Customer Name", value: customerName, icon: FileText },
+    { label: "Customer Name", value: customerName, icon: User },
     { label: "Covered Property", value: fullAddress, icon: MapPin },
-    { label: "Contract Term", value: contractTerm, icon: Calendar },
-    { label: "Contract Status", value: status, icon: CheckCircle, badge: true },
-    { label: "Coverage Plan", value: coveragePlan, icon: Shield, isLink: true },
-    { label: "Optional Coverage", value: optionalCoverage, icon: Shield },
+    { label: "Property Type", value: propertyType, icon: Home },
+    { label: "Contract Term", value: `${startDate} – ${endDate}`, note: freeMonths, icon: Calendar },
+    { label: "Order Date", value: orderDate, icon: CalendarCheck },
+    { label: "Optional Coverage", value: optionalCoverage, icon: ShieldPlus },
+  ];
+
+  const summary = [
+    { label: "Coverage Plan", value: coveragePlan, icon: Shield },
     { label: "Contract Rate", value: contractRate, icon: DollarSign },
     { label: "Service Call Fee", value: serviceCallFee, icon: Wrench },
   ];
 
-  return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-      <div className="mb-4 flex items-center justify-between">
-        <h2 className="text-lg font-semibold text-gray-800">
-          Contract #{policyNumber}
-        </h2>
-        <span className="rounded-full  bg-[#227fe258] text-base px-3 py-1 text-sm font-medium text-blue-700">
-          Property, Coverage & Rate Information
-        </span>
-      </div>
+  const firstName = customerName === "N/A" ? "" : customerName.split(" ")[0];
 
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        {details.map((item, idx) => {
+  return (
+    <div className="space-y-6">
+      <section className="phg-hero">
+        <div className="min-w-0">
+          <p className="phg-eyebrow">Policy Number {policyNumber}</p>
+          <h1>{firstName ? `Welcome, ${firstName}` : "Welcome"}</h1>
+          <p className="phg-hero-sub">
+            Contract status: <span className="phg-status">{status}</span>
+          </p>
+        </div>
+        <div className="phg-hero-actions">
+          <Link href="/claims/new" className="phg-button phg-button-gold">
+            Start a New Claim
+          </Link>
+          <Link href="/claims" className="phg-button phg-button-ghost">
+            View My Claims
+          </Link>
+        </div>
+      </section>
+
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        {summary.map((item) => {
           const Icon = item.icon;
           return (
-            <div key={idx} className="flex items-start gap-3">
-              <div className="mt-0.5 text-gray-400">
-                <Icon size={18} />
-              </div>
-              <div>
-                <p className="text-sm font-medium text-gray-500">
-                  {item.label}
-                </p>
-                {item.isLink ? (
-                  <button
-                    onClick={() => setIsModalOpen(true)}
-                    className="text-sm font-medium text-[#0A2D53] hover:underline"
-                  >
-                    {item.value}
-                  </button>
-                ) : (
-                  <p
-                    className={`text-base ${
-                      item.badge
-                        ? "font-semibold text-[#0A2D53]"
-                        : "text-gray-800"
-                    }`}
-                  >
-                    {item.value}
-                  </p>
-                )}
+            <div key={item.label} className="phg-card flex items-center gap-4 p-5">
+              <span className="phg-icon">
+                <Icon size={22} aria-hidden="true" />
+              </span>
+              <div className="min-w-0">
+                <p className="phg-label">{item.label}</p>
+                <p className="text-xl font-semibold text-[#082D53] break-words">{item.value}</p>
               </div>
             </div>
           );
         })}
       </div>
 
-      <div className="mt-6 border-t border-gray-100 pt-4">
-        <button
-          onClick={() => setIsModalOpen(true)}
-          className="text-sm font-medium text-[#0A2D53] hover:underline"
-        >
-          What's Covered? →
-        </button>
-      </div>
+      <section className="phg-card p-6" aria-labelledby="contract-heading">
+        <div className="mb-5 flex flex-wrap items-center justify-between gap-3">
+          <h2 id="contract-heading" className="phg-title flex items-center gap-2">
+            <FileText size={20} aria-hidden="true" />
+            Contract Details
+          </h2>
+          <button type="button" onClick={() => setIsModalOpen(true)} className="phg-link">
+            What&rsquo;s Covered <ArrowRight size={16} aria-hidden="true" />
+          </button>
+        </div>
 
-      <Modal
-        isOpen={isModalOpen}
-        onClose={() => setIsModalOpen(false)}
-        title="Total Plan Coverage"
-      >
-        <CoverageModalContent />
+        <dl className="grid grid-cols-1 gap-x-8 gap-y-5 md:grid-cols-2">
+          {details.map((item) => {
+            const Icon = item.icon;
+            return (
+              <div key={item.label} className="flex items-start gap-3">
+                <span className="phg-icon phg-icon-sm">
+                  <Icon size={18} aria-hidden="true" />
+                </span>
+                <div className="min-w-0">
+                  <dt className="phg-label">{item.label}</dt>
+                  <dd className="text-base text-[#1F2D3D] break-words">{item.value}</dd>
+                  {item.note && <dd className="text-sm text-[#5C697A]">{item.note}</dd>}
+                </div>
+              </div>
+            );
+          })}
+        </dl>
+      </section>
+
+      <Modal isOpen={isModalOpen} onClose={closeModal} title="What’s Covered">
+        <CoverageModalContent plan={deal.Plan_Type} optionalCoverage={deal.Optional_Coverage} />
       </Modal>
     </div>
   );

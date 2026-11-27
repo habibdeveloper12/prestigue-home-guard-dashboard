@@ -1,26 +1,138 @@
 /* PHG portal brand sync (PORTAL-001). Plain CSS, no dependencies. Colours/typography match prestigehomeguard.com. */
-:root{--phg-navy:#082D53;--phg-gold:#FFC947;--phg-gold-2:#FFD974;--phg-bg:#F4F6F9}
-html,body{font-family:Poppins,system-ui,-apple-system,'Segoe UI',sans-serif} /* load Poppins via next/font (weights 400,500,600,700) in the root layout */
-/* Header */
-.phg-hdr{background:#fff;border-bottom:1px solid #E3E7ED}
-.phg-hdr-top{max-width:1320px;margin:0 auto;padding:12px 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
-.phg-hdr-logo{display:block;width:190px;height:auto}
-.phg-hdr-right{display:flex;align-items:center;gap:20px}
-.phg-hdr-phone{display:flex;flex-direction:column;line-height:1.25;color:var(--phg-navy);text-decoration:none;font-size:12px}
-.phg-hdr-phone strong{font-size:16px}
-.phg-btn{display:inline-block;background:var(--phg-gold);color:var(--phg-navy);font-weight:600;padding:12px 22px;border-radius:10px;text-decoration:none}
-.phg-btn:hover{background:var(--phg-gold-2)}
-.phg-hdr-nav{background:var(--phg-bg)}
-.phg-hdr-nav ul{list-style:none;margin:0 auto;padding:0 24px;max-width:1320px;display:flex;justify-content:center;gap:28px;flex-wrap:wrap}
-.phg-hdr-nav li{position:relative}
-.phg-hdr-nav a{display:block;padding:12px 0;color:var(--phg-navy);font-weight:500;text-decoration:none}
-.phg-hdr-nav a:hover{text-decoration:underline;text-underline-offset:4px}
-.phg-hdr-nav .phg-sub{display:none;position:absolute;left:0;top:100%;min-width:220px;background:#fff;border:1px solid #E3E7ED;border-radius:10px;padding:8px 16px!important;flex-direction:column;gap:0!important;z-index:20}
-.phg-hdr-nav li:hover>.phg-sub,.phg-hdr-nav li:focus-within>.phg-sub{display:flex}
-@media (max-width:767px){.phg-hdr-top{padding:10px 16px}.phg-hdr-logo{width:150px}.phg-hdr-phone{display:none}.phg-hdr-nav ul{gap:6px 18px;justify-content:flex-start;padding:0 16px}.phg-hdr-nav .phg-sub{display:none!important}}
-/* Login page: remove the large empty space and the duplicate logo above the card (the header already carries the logo) */
-.phg-login-main{min-height:0!important;padding:48px 16px 72px!important;align-items:center!important;justify-content:flex-start!important}
+:root{--phg-navy:#082D53;--phg-navy-2:#0F3F72;--phg-gold:#FFC947;--phg-gold-2:#FFD974;--phg-line:#E3E7ED;--phg-muted:#5C697A}
+html,body{font-family:Poppins,system-ui,-apple-system,'Segoe UI',sans-serif}
+a:focus-visible,button:focus-visible,summary:focus-visible{outline:3px solid #1B6FD1;outline-offset:2px}
+
+/* Website header: one white row, same as prestigehomeguard.com */
+.phg-hdr{position:sticky;top:0;z-index:40;background:#fff;border-bottom:1px solid var(--phg-line);box-shadow:0 2px 10px rgba(8,45,83,.06)}
+.phg-hdr-row{max-width:1320px;margin:0 auto;min-height:80px;padding:10px 24px;display:flex;align-items:center;justify-content:space-between;gap:20px}
+.phg-hdr-home{flex:none}
+.phg-hdr-logo{display:block;width:160px;height:auto}
+.phg-hdr-nav>ul{display:flex;align-items:center;gap:20px;margin:0;padding:0;list-style:none}
+.phg-hdr-nav li{position:relative;list-style:none}
+.phg-hdr-nav a{display:flex;align-items:center;gap:4px;padding:10px 0;border-bottom:3px solid transparent;color:var(--phg-navy);font-size:14.5px;font-weight:500;white-space:nowrap;text-decoration:none}
+.phg-hdr-nav a:hover,.phg-hdr-nav a.phg-current{border-bottom-color:var(--phg-gold)}
+.phg-hdr-nav .phg-sub{display:none;position:absolute;left:-14px;top:100%;min-width:240px;margin:0;padding:8px;background:#fff;border:1px solid var(--phg-line);border-radius:12px;box-shadow:0 14px 30px rgba(8,45,83,.14);z-index:50}
+.phg-hdr-nav li:hover>.phg-sub,.phg-hdr-nav li:focus-within>.phg-sub{display:block}
+.phg-hdr-nav .phg-sub a{padding:9px 10px;border:0;border-radius:8px}
+.phg-hdr-nav .phg-sub a:hover{background:#F4F6F9}
+.phg-hdr-actions{display:flex;align-items:center;gap:16px}
+.phg-hdr-phone{display:flex;align-items:center;gap:8px;color:var(--phg-navy);text-decoration:none;white-space:nowrap}
+.phg-hdr-phone-icon{display:none}
+.phg-hdr-phone-text{display:flex;flex-direction:column;line-height:1.25;font-size:11.5px}
+.phg-hdr-phone-text strong{font-size:16px}
+.phg-hdr-cta,.phg-hdr-menu-cta{display:inline-block;background:var(--phg-gold);color:var(--phg-navy);font-size:14.5px;font-weight:600;padding:12px 20px;border-radius:999px;text-decoration:none;white-space:nowrap}
+.phg-hdr-cta:hover,.phg-hdr-menu-cta:hover{background:var(--phg-gold-2)}
+.phg-hdr-menu{display:none}
+.phg-hdr-menu summary{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border:1px solid var(--phg-line);border-radius:10px;color:var(--phg-navy);cursor:pointer;list-style:none}
+.phg-hdr-menu summary::-webkit-details-marker{display:none}
+.phg-hdr-menu>nav{position:absolute;left:0;right:0;top:100%;max-height:calc(100vh - 80px);overflow-y:auto;padding:8px 20px 20px;background:#fff;border-top:1px solid var(--phg-line);box-shadow:0 18px 30px rgba(8,45,83,.16)}
+.phg-hdr-menu ul{margin:0;padding:0;list-style:none}
+.phg-hdr-menu ul ul{padding-left:16px}
+.phg-hdr-menu li a{display:block;padding:11px 0;color:var(--phg-navy);font-weight:500;text-decoration:none}
+.phg-hdr-menu li a.phg-current{font-weight:700;box-shadow:inset 3px 0 0 var(--phg-gold);padding-left:10px}
+.phg-hdr-menu-cta{display:block;margin-top:12px;text-align:center}
+@media (max-width:1279px){
+  .phg-hdr-nav,.phg-hdr-cta{display:none}
+  .phg-hdr-menu{display:block}
+}
+@media (max-width:639px){
+  .phg-hdr-row{min-height:68px;padding:8px 16px;gap:12px}
+  .phg-hdr-logo{width:132px}
+  .phg-hdr-actions{gap:8px}
+  .phg-hdr-phone-text{display:none}
+  .phg-hdr-phone-icon{display:flex;align-items:center;justify-content:center;width:44px;height:44px;border-radius:10px;background:var(--phg-navy);color:#fff}
+}
+
+/* Portal tabs */
+.phg-tabs{background:#fff;border-bottom:1px solid var(--phg-line)}
+.phg-tabs-inner{max-width:1320px;margin:0 auto;padding:0 24px;display:flex;align-items:center;justify-content:space-between;gap:16px}
+.phg-tabs nav{min-width:0}
+.phg-tabs ul{display:flex;gap:4px;margin:0;padding:0;list-style:none}
+.phg-tabs nav a{display:flex;align-items:center;gap:6px;padding:14px 14px 11px;border-bottom:3px solid transparent;color:var(--phg-muted);font-size:14px;font-weight:500;text-decoration:none;white-space:nowrap}
+.phg-tabs nav a:hover{color:var(--phg-navy)}
+.phg-tabs nav a[aria-current="page"]{color:var(--phg-navy);font-weight:600;border-bottom-color:var(--phg-gold)}
+.phg-tabs-user{display:flex;align-items:center;gap:14px;min-width:0}
+.phg-tabs-email{max-width:260px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;color:var(--phg-muted);font-size:13px}
+.phg-tabs-user button{display:flex;align-items:center;gap:6px;padding:8px 12px;border:1px solid var(--phg-line);border-radius:999px;color:var(--phg-navy);font-size:13px;font-weight:600;white-space:nowrap;cursor:pointer}
+.phg-tabs-user button:hover{background:#F4F6F9}
+@media (max-width:899px){
+  .phg-tabs-inner{flex-direction:column-reverse;align-items:stretch;gap:0;padding:0}
+  .phg-tabs-user{justify-content:space-between;padding:8px 16px;border-bottom:1px solid var(--phg-line)}
+  .phg-tabs-email{max-width:none}
+  .phg-tabs ul{justify-content:space-between;gap:0;padding:0 6px}
+  .phg-tabs nav a{flex-direction:column;gap:3px;padding:10px 6px 7px;font-size:12.5px}
+}
+
+/* Page building blocks */
+.phg-page{width:100%;margin:0 auto;padding:32px 24px 56px}
+.phg-h1{margin:0;color:var(--phg-navy);font-size:28px;font-weight:700;line-height:1.25}
+.phg-sub-text{margin-top:4px;color:var(--phg-muted);font-size:14px}
+.phg-card{background:#fff;border:1px solid var(--phg-line);border-radius:16px;box-shadow:0 2px 10px rgba(8,45,83,.05)}
+.phg-title{margin:0;color:var(--phg-navy);font-size:18px;font-weight:600}
+.phg-label{margin:0;color:var(--phg-muted);font-size:13px;font-weight:500}
+.phg-icon{display:flex;flex:none;align-items:center;justify-content:center;width:46px;height:46px;border-radius:12px;background:#FFF3D1;color:var(--phg-navy)}
+.phg-icon-sm{width:36px;height:36px;border-radius:10px;background:#EEF2F7}
+.phg-link{display:inline-flex;align-items:center;gap:6px;color:var(--phg-navy);font-size:14px;font-weight:600;cursor:pointer}
+.phg-link:hover{text-decoration:underline;text-underline-offset:4px}
+.phg-button{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:46px;padding:11px 22px;border:2px solid transparent;border-radius:999px;font-size:14.5px;font-weight:600;line-height:1.2;text-align:center;text-decoration:none;cursor:pointer}
+a.phg-button:hover{text-decoration:none}
+.phg-button:disabled{opacity:.65;cursor:not-allowed}
+.phg-button-gold{background:var(--phg-gold);color:var(--phg-navy)}
+.phg-button-gold:hover{background:var(--phg-gold-2)}
+.phg-button-ghost{border-color:rgba(255,255,255,.65);color:#fff}
+.phg-button-ghost:hover{background:rgba(255,255,255,.12)}
+.phg-button-outline{border-color:var(--phg-navy);color:var(--phg-navy)}
+.phg-button-outline:hover{background:#EEF2F7}
+.phg-hero{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:24px;padding:32px;border-radius:20px;background:linear-gradient(135deg,var(--phg-navy),var(--phg-navy-2));color:#fff}
+.phg-hero h1{margin:6px 0 8px;font-size:30px;font-weight:700;line-height:1.25;overflow-wrap:anywhere}
+.phg-eyebrow{margin:0;color:var(--phg-gold-2);font-size:13px;font-weight:600}
+.phg-hero-sub{margin:0;color:#D6DFEA;font-size:14px}
+.phg-status{display:inline-block;margin-left:4px;padding:2px 12px;border-radius:999px;background:#E3F6E8;color:#15632F;font-size:13px;font-weight:600}
+.phg-hero-actions{display:flex;flex-wrap:wrap;gap:12px}
+@media (max-width:639px){
+  .phg-page{padding:20px 16px 40px}
+  .phg-h1{font-size:24px}
+  .phg-hero{padding:24px 20px}
+  .phg-hero h1{font-size:24px}
+  .phg-hero-actions{width:100%}
+  .phg-hero-actions .phg-button{width:100%}
+}
+
+/* Start a claim page */
+.phg-claim{background:linear-gradient(135deg,var(--phg-navy),var(--phg-navy-2))}
+.phg-claim-inner{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1.15fr);grid-template-rows:auto 1fr;grid-template-areas:"intro card" "aside card";column-gap:56px;row-gap:28px;max-width:1200px;margin:0 auto;padding:48px 24px 64px}
+.phg-claim-intro{grid-area:intro;color:#fff}
+.phg-back{display:inline-flex;align-items:center;gap:4px;margin-bottom:22px;color:#D6DFEA;font-size:14px;font-weight:500}
+.phg-back:hover{color:var(--phg-gold-2)}
+.phg-claim-intro h1{margin:0 0 14px;font-size:38px;font-weight:700;line-height:1.18}
+.phg-claim-lead{max-width:44ch;color:#D6DFEA;font-size:16px;line-height:1.65}
+.phg-claim-policy{display:inline-block;margin-top:20px;padding:8px 16px;border:1px solid rgba(255,255,255,.25);border-radius:999px;color:#D6DFEA;font-size:14px}
+.phg-claim-policy strong{margin-left:6px;color:#fff}
+.phg-claim-card{grid-area:card;align-self:start;padding:32px;background:#fff;border-top:5px solid var(--phg-gold);border-radius:18px;box-shadow:0 20px 45px rgba(0,0,0,.22);color:#1F2D3D}
+.phg-claim-aside{grid-area:aside;align-self:start;color:#fff}
+.phg-field-label{display:block;margin-bottom:6px;color:var(--phg-navy);font-size:14px;font-weight:600}
+.phg-input{display:block;width:100%;min-width:0;min-height:48px;padding:11px 14px;background:#fff;border:1px solid #8995A6;border-radius:10px;color:#1F2D3D;font-size:16px;scroll-margin-top:110px}
+.phg-input::placeholder{color:#6B7787;font-size:14.5px}
+.phg-input:focus{border-color:var(--phg-navy);outline:3px solid rgba(27,111,209,.35);outline-offset:0}
+.phg-input-error{border-color:#C62828}
+.phg-error{margin-top:5px;color:#B3261E;font-size:13px}
+.phg-choice{display:flex;align-items:center;justify-content:center;gap:8px;min-width:96px;min-height:46px;padding:0 18px;border:1px solid #8995A6;border-radius:10px;font-size:15px;cursor:pointer}
+.phg-choice input{width:18px;height:18px;accent-color:var(--phg-navy)}
+.phg-choice:has(input:checked){border-color:var(--phg-navy);background:#EEF2F7;font-weight:600}
+.phg-steps{margin:0 0 24px;padding:0;list-style:none;counter-reset:phg-step}
+.phg-steps li{display:flex;align-items:center;gap:14px;padding:9px 0;font-size:15px;counter-increment:phg-step}
+.phg-steps li::before{content:counter(phg-step);display:flex;flex:none;align-items:center;justify-content:center;width:32px;height:32px;border-radius:50%;background:var(--phg-gold);color:var(--phg-navy);font-size:14px;font-weight:700}
+.phg-call{display:flex;align-items:flex-start;gap:14px;padding:18px 20px;border:1px solid rgba(255,255,255,.2);border-radius:14px;background:rgba(255,255,255,.07);color:#D6DFEA;font-size:14px}
+.phg-call svg{flex:none;margin-top:2px;color:var(--phg-gold)}
+.phg-call a{display:inline-block;margin-top:4px;color:#fff;font-size:20px;font-weight:700;text-decoration:none}
+@media (max-width:899px){
+  .phg-claim-inner{grid-template-columns:minmax(0,1fr);grid-template-rows:none;grid-template-areas:"intro" "card" "aside";row-gap:22px;padding:24px 16px 40px}
+  .phg-claim-intro h1{font-size:28px}
+  .phg-claim-card{padding:22px 18px}
+}
+
+/* Login page: the header already carries the logo */
+.phg-login-main{min-height:55vh!important;padding:48px 16px 72px!important;align-items:center!important;justify-content:flex-start!important}
 .phg-login-main .phg-login-logo{display:none}
 @media (max-width:767px){.phg-login-main{padding:28px 16px 56px!important}}
-/* Buttons never underlined (site standard) */
-a.phg-btn,a.phg-btn:hover,a.phg-btn:focus{text-decoration:none}

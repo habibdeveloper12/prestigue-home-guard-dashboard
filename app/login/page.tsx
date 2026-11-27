@@ -47,9 +47,12 @@ export default function LoginPage() {
         </div>
 
         <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-gray-200">
-          <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
+          <h1 className="mb-2 text-center text-2xl font-semibold text-[#082D53]">
             Customer Portal
-          </h2>
+          </h1>
+          <p className="mb-6 text-center text-sm text-gray-600">
+            Sign in to view your contract and claims.
+          </p>
 
           <form onSubmit={handleSubmit} className="space-y-5">
             <div>
@@ -57,7 +60,7 @@ export default function LoginPage() {
                 htmlFor="email"
                 className="block text-sm font-medium text-gray-700"
               >
-                Email address
+                Email Address
               </label>
               <div className="relative mt-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -80,7 +83,7 @@ export default function LoginPage() {
                 htmlFor="policy"
                 className="block text-sm font-medium text-gray-700"
               >
-                Policy #
+                Policy Number
               </label>
               <div className="relative mt-1">
                 <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -93,7 +96,7 @@ export default function LoginPage() {
                   onChange={(e) => setPolicyNumber(e.target.value)}
                   required
                   className="block w-full rounded-lg border border-gray-300 py-3 pl-10 pr-4 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200"
-                  placeholder="e.g., 271349963"
+                  placeholder="For example: 123456789"
                 />
               </div>
             </div>
@@ -107,9 +110,9 @@ export default function LoginPage() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-700 disabled:opacity-50"
+              className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#0F3F72] disabled:opacity-50"
             >
-              {isLoading ? "Signing in..." : "Sign in"}
+              {isLoading ? "Signing in…" : "Sign In"}
             </button>
           </form>
 
@@ -118,7 +121,7 @@ export default function LoginPage() {
               href="/forgot-policy"
               className="text-sm font-medium text-[#0A2D53] hover:underline"
             >
-              Forgot Policy #
+              Forgot your policy number?
             </Link>
           </div>
         </div>

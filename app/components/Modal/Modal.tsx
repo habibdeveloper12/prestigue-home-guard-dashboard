@@ -57,6 +57,7 @@ export default function Modal({
           <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
           <button
             onClick={onClose}
+            aria-label="Close"
             className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
           >
             <X size={20} />

@@ -2,11 +2,11 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
-import { ChevronLeft, AlertCircle, Loader2 } from "lucide-react";
+import { ChevronLeft, Loader2, Phone } from "lucide-react";
 import Link from "next/link";
 import { useSession } from "next-auth/react";
 
-// Full system options from image
+// The value is what is saved with the claim; the label is what the customer sees.
 const systemOptions = [
   "Air Conditioning System",
   "Built-In Microwave",
@@ -26,6 +26,9 @@ const systemOptions = [
   "Water Heater",
   "Whirlpool Bathtub",
 ];
+const optionLabels: Record<string, string> = {
+  "Oven Stove Cooktop": "Oven / Stove / Cooktop",
+};
 
 export default function NewClaimPage() {
   const router = useRouter();
@@ -56,14 +59,14 @@ export default function NewClaimPage() {
 
   const validateForm = () => {
     const newErrors: Record<string, string> = {};
-    if (!formData.system) newErrors.system = "System is required";
-    if (!formData.issue.trim()) newErrors.issue = "Issue is required";
+    if (!formData.system) newErrors.system = "Please select a system or appliance.";
+    if (!formData.issue.trim()) newErrors.issue = "Please tell us what the problem is.";
     if (!formData.lastWorking)
-      newErrors.lastWorking = "Please specify when it last worked";
+      newErrors.lastWorking = "Please enter when the item last worked properly.";
     if (!formData.bestPhone)
-      newErrors.bestPhone = "Best phone number is required";
+      newErrors.bestPhone = "Please enter the best phone number to reach you.";
     if (!formData.description.trim())
-      newErrors.description = "Description is required";
+      newErrors.description = "Please describe the problem.";
     return newErrors;
   };
 
@@ -72,6 +75,7 @@ export default function NewClaimPage() {
     const validationErrors = validateForm();
     if (Object.keys(validationErrors).length > 0) {
       setErrors(validationErrors);
+      document.getElementById(Object.keys(validationErrors)[0])?.focus();
       return;
     }
 
@@ -92,232 +96,133 @@ export default function NewClaimPage() {
         }),
       });
 
-      const data = await response.json();
-
       if (!response.ok) {
-        throw new Error(data.error || "Failed to create claim");
+        throw new Error("claim failed");
       }
-await new Promise((resolve) => setTimeout(resolve, 1500));
+      await new Promise((resolve) => setTimeout(resolve, 1500));
       router.push("/claims");
       router.refresh();
-    } catch (error: any) {
-      setSubmitError(error.message);
+    } catch {
+      setSubmitError(
+        "We couldn’t submit your claim. Please try again or call (888) 970-6181.",
+      );
     } finally {
       setIsSubmitting(false);
     }
   };
 
-  return (
-    <div className="mx-auto max-w-3xl px-4 py-8 sm:px-6 lg:px-8">
-      <div className="space-y-6">
-        <Link
-          href="/claims"
-          className="inline-flex items-center gap-1 text-sm font-medium text-gray-500 hover:text-gray-700"
-        >
-          <ChevronLeft size={16} />
-          Back to Claims
-        </Link>
+  const fieldProps = (name: string) => ({
+    id: name,
+    name,
+    onChange: handleChange,
+    required: true,
+    className: `phg-input ${errors[name] ? "phg-input-error" : ""}`,
+    "aria-invalid": !!errors[name],
+    "aria-describedby": errors[name] ? `${name}-error` : undefined,
+  });
+  const errorText = (name: string) =>
+    errors[name] ? (
+      <p id={`${name}-error`} className="phg-error">
+        {errors[name]}
+      </p>
+    ) : null;
+  const required = <span className="text-[#C62828]" aria-hidden="true">*</span>;
 
-        <div>
-          <h1 className="text-2xl font-semibold text-gray-900">
-            Add a new Claim
-          </h1>
-          <div className="mt-2 flex items-center gap-2">
-            <span className="text-sm font-medium text-gray-500">
-              Contract Number:
-            </span>
-            <span className="text-base font-semibold text-gray-900">
-              {session?.user?.policyNumber || "N/A"}
-            </span>
-          </div>
+  return (
+    <div className="phg-claim">
+      <div className="phg-claim-inner">
+        <div className="phg-claim-intro">
+          <Link href="/claims" className="phg-back">
+            <ChevronLeft size={16} aria-hidden="true" />
+            Back to My Claims
+          </Link>
+          <h1>Start a New Claim</h1>
+          <p className="phg-claim-lead">
+            Tell us which system or appliance needs service and what happened,
+            then submit your claim online.
+          </p>
+          <p className="phg-claim-policy">
+            Policy Number <strong>{session?.user?.policyNumber || "N/A"}</strong>
+          </p>
         </div>
 
-        <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
-          <form onSubmit={handleSubmit} className="space-y-6">
-            {/* System Dropdown */}
-            <div>
-              <label
-                htmlFor="system"
-                className="block text-sm font-medium text-gray-700"
-              >
-                System <span className="text-red-500">*</span>
+        <div className="phg-claim-card">
+          <form onSubmit={handleSubmit} className="grid grid-cols-1 gap-5 sm:grid-cols-2" noValidate>
+            <p className="text-sm text-[#5C697A] sm:col-span-2">
+              Fields marked {required} are required.
+            </p>
+
+            <div className="sm:col-span-2">
+              <label htmlFor="system" className="phg-field-label">
+                System or Appliance {required}
               </label>
-              <select
-                id="system"
-                name="system"
-                value={formData.system}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.system ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              >
-                <option value="">Select a System</option>
+              <select {...fieldProps("system")} value={formData.system}>
+                <option value="">Select a system or appliance</option>
                 {systemOptions.map((opt) => (
                   <option key={opt} value={opt}>
-                    {opt}
+                    {optionLabels[opt] || opt}
                   </option>
                 ))}
               </select>
-              {errors.system && (
-                <p className="mt-1 text-sm text-red-600">{errors.system}</p>
-              )}
+              {errorText("system")}
             </div>
 
-            {/* Issue Text Field */}
-            <div>
-              <label
-                htmlFor="issue"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Issue <span className="text-red-500">*</span>
+            <div className="sm:col-span-2">
+              <label htmlFor="issue" className="phg-field-label">
+                What is the problem? {required}
               </label>
-              <input
-                type="text"
-                id="issue"
-                name="issue"
-                value={formData.issue}
-                onChange={handleChange}
-                placeholder="e.g., Not cooling, Leaking water"
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.issue ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              />
-              {errors.issue && (
-                <p className="mt-1 text-sm text-red-600">{errors.issue}</p>
-              )}
+              <input type="text" {...fieldProps("issue")} value={formData.issue} placeholder="For example: leaking water" />
+              {errorText("issue")}
             </div>
 
-            {/* Last Working Date/Time */}
             <div>
-              <label
-                htmlFor="lastWorking"
-                className="block text-sm font-medium text-gray-700"
-              >
-                When was the last time the item was working properly?{" "}
-                <span className="text-red-500">*</span>
+              <label htmlFor="lastWorking" className="phg-field-label">
+                When did it last work properly? {required}
               </label>
-              <input
-                type="datetime-local"
-                id="lastWorking"
-                name="lastWorking"
-                value={formData.lastWorking}
-                onChange={handleChange}
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.lastWorking ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              />
-              {errors.lastWorking && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.lastWorking}
-                </p>
-              )}
+              <input type="datetime-local" {...fieldProps("lastWorking")} value={formData.lastWorking} />
+              {errorText("lastWorking")}
             </div>
 
-            {/* Tenant */}
             <div>
-              <label className="block text-sm font-medium text-gray-700">
-                Tenant
+              <label htmlFor="bestPhone" className="phg-field-label">
+                Best Phone Number {required}
               </label>
-              <div className="mt-2 flex gap-6">
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="tenant"
-                    value="No"
-                    checked={formData.tenant === "No"}
-                    onChange={handleChange}
-                    className="h-4 w-4 border-gray-300 text-[#0A2D53] focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">No</span>
-                </label>
-                <label className="inline-flex items-center">
-                  <input
-                    type="radio"
-                    name="tenant"
-                    value="Yes"
-                    checked={formData.tenant === "Yes"}
-                    onChange={handleChange}
-                    className="h-4 w-4 border-gray-300 text-[#0A2D53] focus:ring-blue-500"
-                  />
-                  <span className="ml-2 text-sm text-gray-700">Yes</span>
-                </label>
+              <input type="tel" autoComplete="tel" {...fieldProps("bestPhone")} value={formData.bestPhone} placeholder="(555) 123-4567" />
+              {errorText("bestPhone")}
+            </div>
+
+            <fieldset className="sm:col-span-2">
+              <legend className="phg-field-label">Are you renting this home?</legend>
+              <div className="mt-1.5 flex gap-3">
+                {["No", "Yes"].map((value) => (
+                  <label key={value} className="phg-choice">
+                    <input type="radio" name="tenant" value={value} checked={formData.tenant === value} onChange={handleChange} />
+                    <span>{value}</span>
+                  </label>
+                ))}
               </div>
-            </div>
+            </fieldset>
 
-            {/* Best Phone */}
-            <div>
-              <label
-                htmlFor="bestPhone"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Best Phone <span className="text-red-500">*</span>
+            <div className="sm:col-span-2">
+              <label htmlFor="description" className="phg-field-label">
+                Describe the problem in detail {required}
               </label>
-              <input
-                type="tel"
-                id="bestPhone"
-                name="bestPhone"
-                value={formData.bestPhone}
-                onChange={handleChange}
-                placeholder="(123) 456-7890"
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.bestPhone ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              />
-              {errors.bestPhone && (
-                <p className="mt-1 text-sm text-red-600">{errors.bestPhone}</p>
-              )}
-            </div>
-
-            {/* Description */}
-            <div>
-              <label
-                htmlFor="description"
-                className="block text-sm font-medium text-gray-700"
-              >
-                Describe in detail the problem occurring.{" "}
-                <span className="text-red-500">*</span>
-              </label>
-              <textarea
-                id="description"
-                name="description"
-                rows={4}
-                value={formData.description}
-                onChange={handleChange}
-                placeholder="Please provide as much detail as possible..."
-                className={`mt-1 block w-full rounded-lg border ${
-                  errors.description ? "border-red-300" : "border-gray-300"
-                } bg-white py-2.5 px-3 text-gray-900 placeholder:text-gray-400 focus:border-blue-500 focus:outline-none focus:ring-2 focus:ring-blue-200`}
-              />
-              {errors.description && (
-                <p className="mt-1 text-sm text-red-600">
-                  {errors.description}
-                </p>
-              )}
+              <textarea rows={5} {...fieldProps("description")} value={formData.description} placeholder="Tell us what happened, when it started and anything you have noticed." />
+              {errorText("description")}
             </div>
 
             {submitError && (
-              <div className="rounded-lg bg-red-50 p-3 text-sm text-red-600">
+              <div role="alert" className="rounded-lg bg-red-50 p-3 text-sm text-red-700 sm:col-span-2">
                 {submitError}
               </div>
             )}
 
-            <div className="flex items-start gap-2 rounded-lg bg-blue-50 p-4">
-              <AlertCircle size={18} className="mt-0.5 text-[#0A2D53]" />
-              <p className="text-sm text-[#0A2D53]">
-                Complete all required fields to continue.
-              </p>
-            </div>
-
-            <div className="flex justify-end">
-              <button
-                type="submit"
-                disabled={isSubmitting}
-                className="inline-flex items-center justify-center gap-2 rounded-lg bg-[#0A2D53] text-white px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
-              >
+            <div className="sm:col-span-2">
+              <button type="submit" disabled={isSubmitting} className="phg-button phg-button-gold w-full">
                 {isSubmitting ? (
                   <>
-                    <Loader2 size={16} className="animate-spin" />
-                    Submitting...
+                    <Loader2 size={18} className="animate-spin" aria-hidden="true" />
+                    Submitting…
                   </>
                 ) : (
                   "Submit Claim"
@@ -325,6 +230,21 @@ await new Promise((resolve) => setTimeout(resolve, 1500));
               </button>
             </div>
           </form>
+        </div>
+
+        <div className="phg-claim-aside">
+          <ol className="phg-steps">
+            <li>Choose the system or appliance</li>
+            <li>Describe the problem</li>
+            <li>Submit your claim, and our team will contact you</li>
+          </ol>
+          <div className="phg-call">
+            <Phone size={20} aria-hidden="true" />
+            <div>
+              <p>Prefer to call? Our customer service team is available 24/7.</p>
+              <a href="tel:+18889706181">(888) 970-6181</a>
+            </div>
+          </div>
         </div>
       </div>
     </div>

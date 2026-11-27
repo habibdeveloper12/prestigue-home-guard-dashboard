@@ -12,6 +12,7 @@ import {
   AlertCircle,
 } from "lucide-react";
 import { ZohoCase } from "@/lib/zoho/cases";
+import { formatDate, formatDateTime, formatMoney } from "@/lib/format";
 
 interface ClaimDetailsModalProps {
   isOpen: boolean;
@@ -73,6 +74,7 @@ export default function ClaimDetailsModal({
           </h2>
           <button
             onClick={onClose}
+            aria-label="Close claim details"
             className="rounded-lg p-1 text-gray-400 hover:bg-gray-100 hover:text-gray-600"
           >
             <X size={20} />
@@ -94,7 +96,7 @@ export default function ClaimDetailsModal({
               </span>
             </div>
             <div className="flex items-center gap-2">
-              <span className="text-sm font-medium text-gray-500">Origin:</span>
+              <span className="text-sm font-medium text-gray-500">Submitted by:</span>
               <span className="text-sm text-gray-900">
                 {claim.Case_Origin || "—"}
               </span>
@@ -125,7 +127,7 @@ export default function ClaimDetailsModal({
                   Date Reported
                 </p>
                 <p className="text-sm text-gray-900">
-                  {new Date(claim.Date_reported).toLocaleDateString()}
+                  {formatDate(claim.Date_reported)}
                 </p>
               </div>
             </div>
@@ -133,10 +135,10 @@ export default function ClaimDetailsModal({
               <Calendar size={18} className="text-gray-400 mt-0.5" />
               <div>
                 <p className="text-sm font-medium text-gray-500">
-                  Created Time
+                  Submitted
                 </p>
                 <p className="text-sm text-gray-900">
-                  {new Date(claim.Created_Time).toLocaleString()}
+                  {formatDateTime(claim.Created_Time)}
                 </p>
               </div>
             </div>
@@ -146,7 +148,7 @@ export default function ClaimDetailsModal({
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4 border-t border-gray-100">
             <div>
               <h3 className="text-sm font-medium text-gray-500 mb-2">
-                Related Policy
+                Policy
               </h3>
               {claim.Related_Policy ? (
                 <div className="bg-gray-50 rounded-lg p-3">
@@ -181,13 +183,13 @@ export default function ClaimDetailsModal({
           </div>
 
           {/* Additional Info */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4 border-t border-gray-100">
             <div>
               <p className="text-sm font-medium text-gray-500">
                 Service Call Fee
               </p>
               <p className="text-sm text-gray-900">
-                ${claim.Service_Call_Fee_Amount || "0"}
+                {formatMoney(claim.Service_Call_Fee_Amount || 0)}
               </p>
             </div>
             <div>
@@ -218,7 +220,7 @@ export default function ClaimDetailsModal({
                     <p className="text-sm text-gray-700">{comment.content}</p>
                     <p className="text-xs text-gray-500 mt-1">
                       {comment.created_by} -{" "}
-                      {new Date(comment.created_time).toLocaleString()}
+                      {formatDateTime(comment.created_time)}
                     </p>
                   </div>
                 ))}

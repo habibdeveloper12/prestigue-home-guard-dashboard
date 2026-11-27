@@ -8,7 +8,7 @@ export async function authenticate(email: string, policyNumber: string) {
   try {
     const deal = await findDealByEmailAndPolicy(email, policyNumber);
     if (!deal) {
-      return { error: "Invalid email or policy number" };
+      return { error: "The email address or policy number is incorrect." };
     }
 
     // Only users with an active policy/deal may log in
@@ -16,8 +16,8 @@ export async function authenticate(email: string, policyNumber: string) {
       return {
         error:
           deal.Stage === "Cancelled"
-            ? "Your contract has been cancelled. Please contact the admin at Prestige Home Guard to reactivate your account."
-            : "Your policy is not active, so you can't access the dashboard yet. Please contact the admin at Prestige Home Guard for assistance.",
+            ? "Your contract has been cancelled. Please call Prestige Home Guard at (888) 970-6181 to reactivate your account."
+            : "Your policy is not active, so you can't access the portal yet. Please call Prestige Home Guard at (888) 970-6181 for help.",
       };
     }
 
@@ -31,6 +31,6 @@ export async function authenticate(email: string, policyNumber: string) {
 
     return { success: true };
   } catch (error) {
-    return { error: "Authentication failed. Please try again." };
+    return { error: "We couldn't sign you in. Please try again." };
   }
 }

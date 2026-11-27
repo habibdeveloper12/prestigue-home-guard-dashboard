@@ -33,7 +33,7 @@ export async function POST(request: NextRequest) {
       return NextResponse.json(
         {
           error:
-            "We don't have any record with this email in our system. Please contact support for assistance.",
+            "We couldn't find a policy for this email address. Please call (888) 970-6181 for help.",
         },
         { status: 404 },
       );
@@ -109,7 +109,7 @@ function buildEmailTemplate(
         <!-- Main Content -->
         <tr>
           <td style="padding: 40px 30px;">
-            <h1 style="color: #0A2D53; font-size: 24px; margin-top: 0;">Hi,</h1>
+            <h1 style="color: #0A2D53; font-size: 24px; margin-top: 0;">Hello,</h1>
             <p style="color: #333333; font-size: 16px; line-height: 1.5;">
               You recently requested your policy number from the Prestige Home Guard Customer Portal.
             </p>
@@ -125,7 +125,7 @@ function buildEmailTemplate(
             </table>
 
             <p style="color: #333333; font-size: 16px; line-height: 1.5;">
-              Use this policy number to log in to your account at<br>
+              Use this policy number to sign in to your account at<br>
               <a href="https://my.prestigehomeguard.com/login" style="color: #0A2D53; text-decoration: underline; font-weight: bold;">my.prestigehomeguard.com</a>
             </p>
             <p style="color: #333333; font-size: 16px; line-height: 1.5;">

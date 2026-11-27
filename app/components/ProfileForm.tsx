@@ -57,22 +57,22 @@ export default function ProfileForm({
         throw new Error(data.error || "Update failed");
       }
 
-      setSuccessMessage("Profile updated successfully!");
+      setSuccessMessage("Your profile has been updated.");
       setTimeout(() => setSuccessMessage(""), 3000);
-    } catch (err: any) {
-      setError(err.message);
+    } catch {
+      setError("We couldn't update your profile. Please try again or call (888) 970-6181.");
     } finally {
       setIsSubmitting(false);
     }
   };
 
   return (
-    <div className="rounded-2xl border border-gray-200 bg-white p-6 shadow-sm">
+    <div className="phg-card p-6">
       {/* Contract Number (Read-only) */}
       <div className="mb-6 border-b border-gray-100 pb-4">
         <div className="flex items-center gap-2">
           <span className="text-sm font-medium text-gray-500">
-            Policy Number:
+            Policy Number
           </span>
           <span className="text-lg font-semibold text-gray-900">
             {policyNumber}
@@ -87,7 +87,7 @@ export default function ProfileForm({
             htmlFor="email"
             className="block text-sm font-medium text-gray-700"
           >
-            Email address
+            Email Address
           </label>
           <div className="relative mt-1">
             <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -215,7 +215,7 @@ export default function ProfileForm({
               htmlFor="mailingZip"
               className="block text-sm font-medium text-gray-700"
             >
-              Mailing Zip
+              Mailing ZIP Code
             </label>
             <input
               type="text"
@@ -228,13 +228,13 @@ export default function ProfileForm({
           </div>
         </div>
 
-        <div className="grid grid-cols-1 gap-4 sm:grid-cols-3">
+        <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
           <div>
             <label
-              htmlFor="mailingCity"
+              htmlFor="coverageAddress"
               className="block text-sm font-medium text-gray-700"
             >
-              Coverage Address
+              Covered Property Address
             </label>
             <input
               type="text"
@@ -248,10 +248,10 @@ export default function ProfileForm({
           </div>
           <div>
             <label
-              htmlFor="mailingState"
+              htmlFor="coverageAddressCityZip"
               className="block text-sm font-medium text-gray-700"
             >
-              Coverage Address City & Postcode
+              City, State and ZIP Code
             </label>
             <input
               type="text"
@@ -282,9 +282,9 @@ export default function ProfileForm({
           <button
             type="submit"
             disabled={isSubmitting}
-            className="rounded-lg bg-blue-600 px-6 py-2.5 text-sm font-medium text-white shadow-sm transition hover:bg-blue-700 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+            className="phg-button phg-button-gold"
           >
-            {isSubmitting ? "Updating..." : "Update"}
+            {isSubmitting ? "Saving…" : "Save Changes"}
           </button>
         </div>
       </form>

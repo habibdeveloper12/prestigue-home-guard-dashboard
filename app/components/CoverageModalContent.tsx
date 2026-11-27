@@ -1,59 +1,51 @@
-const coveredItems = [
-  "Air Conditioning System",
-  "Ceiling and Exhaust Fans",
-  "Cooktop",
-  "Dishwasher",
-  "Clothes Dryer",
-  "Drywall",
-  "Ductwork",
-  "Electrical System",
-  "Garage Door Opener",
-  "Garbage Disposal",
-  "Heating System",
-  "Built-In Microwave",
-  "Oven Stove Cooktop",
-  "Plumbing Stopper",
-  "Plumbing System",
-  "Refrigerator",
-  "Clothes Washer",
-  "Water Heater",
-  "Whirlpool Bathtub",
-];
+import { planItems, planName } from "@/lib/plans";
 
-export default function CoverageModalContent() {
+interface CoverageListProps {
+  plan?: string | null;
+  optionalCoverage?: string[] | null;
+}
+
+// Shows only what belongs to the customer's own plan, plus any optional coverage on their record.
+export default function CoverageModalContent({ plan, optionalCoverage }: CoverageListProps) {
+  const items = planItems(plan);
+  const name = planName(plan);
+
   return (
     <div className="space-y-6">
-      {/* What's Covered Section */}
       <div>
         <h3 className="mb-3 text-lg font-medium text-gray-800">
-          What's Covered:
+          {items ? `Your ${name} Plan` : "Your Plan"}
         </h3>
-        <div className="grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
-          {coveredItems.map((item) => (
-            <div key={item} className="flex items-center gap-2 py-1">
-              <span className="h-1.5 w-1.5 rounded-full bg-green-500"></span>
-              <span className="text-gray-700">{item}</span>
-            </div>
-          ))}
-        </div>
+        {items ? (
+          <ul className="grid grid-cols-1 gap-x-4 gap-y-1 sm:grid-cols-2">
+            {items.map((item) => (
+              <li key={item} className="flex items-center gap-2 py-1">
+                <span className="h-1.5 w-1.5 flex-none rounded-full bg-[#FFC947]" aria-hidden="true"></span>
+                <span className="text-gray-700">{item}</span>
+              </li>
+            ))}
+          </ul>
+        ) : (
+          <p className="text-gray-700">
+            Please call customer service at{" "}
+            <a href="tel:+18889706181" className="whitespace-nowrap font-semibold text-[#082D53]">(888) 970-6181</a>{" "}
+            for your coverage details.
+          </p>
+        )}
       </div>
 
-      {/* Additional Optional Coverage Section */}
-      <div>
-        <h3 className="mb-3 text-lg font-medium text-gray-800">
-          Additional Optional Coverage:
-        </h3>
-        <div className="rounded-lg bg-blue-50 p-4">
-          <div className="flex items-center gap-2">
-            <span className="h-2 w-2 rounded-full bg-blue-500"></span>
-            <span className="font-medium text-gray-800">Pool-Spa</span>
-          </div>
-          <p className="mt-2 text-sm text-gray-600">
-            Coverage includes pool and spa equipment, plumbing, and electrical
-            components.
-          </p>
+      {!!optionalCoverage?.length && (
+        <div>
+          <h3 className="mb-3 text-lg font-medium text-gray-800">Your Optional Coverage</h3>
+          <ul className="rounded-lg bg-blue-50 p-4">
+            {optionalCoverage.map((item) => (
+              <li key={item} className="py-1 text-gray-800">{item}</li>
+            ))}
+          </ul>
         </div>
-      </div>
+      )}
+
+      <p className="text-sm text-gray-600">Coverage depends on your plan and its terms.</p>
     </div>
   );
 }

@@ -25,12 +25,12 @@ export default async function ProfilePage() {
   }
 
   return (
-    <div className="mx-auto max-w-4xl px-4 py-8 sm:px-6 lg:px-8">
+    <div className="phg-page max-w-4xl">
       <div className="space-y-6">
         <div>
-          <h1 className="text-2xl font-semibold text-gray-900">My Profile</h1>
+          <h1 className="phg-h1">My Profile</h1>
           <p className="mt-1 text-sm text-gray-500">
-            Manage your contact information and address details.
+            View and update your contact information.
           </p>
         </div>
 

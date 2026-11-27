@@ -8,6 +8,8 @@ export interface ZohoDeal {
   Deal_Name?: string;
   Contract_Rate?: number;
   Coverage_Plan?: string;
+  Plan_Type?: string;
+  Property_Type?: string;
   Stage?: string;
   Service_Call_Fee?: number;
   Contact_Name?: { id: string; name: string };

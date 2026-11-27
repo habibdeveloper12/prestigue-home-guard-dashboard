@@ -22,7 +22,7 @@ export default function ForgotPolicyPage() {
     e.preventDefault();
 
     if (!recaptchaToken) {
-      setError("Please verify you are not a robot.");
+      setError("Please confirm you are not a robot.");
       return;
     }
 
@@ -39,7 +39,7 @@ export default function ForgotPolicyPage() {
       const data = await res.json();
 
       if (!res.ok) {
-        throw new Error(data.error || "Something went wrong");
+        throw new Error(data.error || "Something went wrong. Please try again.");
       }
 
       setSubmitted(true);
@@ -51,9 +51,9 @@ export default function ForgotPolicyPage() {
   };
 
   return (
-    <div className="flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
+    <div className="phg-login-main flex min-h-screen flex-col items-center justify-center bg-gray-50 px-4 py-12">
       <div className="w-full max-w-md">
-        <div className="mb-8 text-center">
+        <div className="phg-login-logo mb-8 text-center">
           <Link href="/" className="flex items-center gap-2">
             <img
               src="https://prestigehomeguard.com/wp-content/uploads/2025/01/BHG-Logo.png"
@@ -66,9 +66,9 @@ export default function ForgotPolicyPage() {
         </div>
 
         <div className="rounded-2xl bg-white p-8 shadow-lg ring-1 ring-gray-200">
-          <h2 className="mb-6 text-center text-2xl font-semibold text-gray-800">
-            Send Policy #
-          </h2>
+          <h1 className="mb-6 text-center text-2xl font-semibold text-[#082D53]">
+            Get Your Policy Number
+          </h1>
 
           {!submitted ? (
             <form onSubmit={handleSubmit} className="space-y-5">
@@ -77,7 +77,7 @@ export default function ForgotPolicyPage() {
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
                 >
-                  Email address
+                  Email Address
                 </label>
                 <div className="relative mt-1">
                   <div className="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
@@ -132,9 +132,9 @@ export default function ForgotPolicyPage() {
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-blue-800 focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
+                className="w-full rounded-lg bg-[#0A2D53] px-4 py-3 text-base font-semibold text-white shadow-sm transition hover:bg-[#0F3F72] focus:outline-none focus:ring-2 focus:ring-blue-500 focus:ring-offset-2 disabled:opacity-50"
               >
-                {isSubmitting ? "Retrieving..." : "Retrieve Policy #"}
+                {isSubmitting ? "Sending…" : "Email My Policy Number"}
               </button>
             </form>
           ) : (
@@ -158,8 +158,8 @@ export default function ForgotPolicyPage() {
                 Check your email
               </h3>
               <p className="mt-2 text-sm text-gray-600">
-                If an account exists for {email}, we've sent policy details to
-                your inbox.
+                If an account exists for {email}, we&rsquo;ve sent your policy
+                number to that address.
               </p>
             </div>
           )}

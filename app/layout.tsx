@@ -14,8 +14,8 @@ const poppins = Poppins({
 });
 
 export const metadata: Metadata = {
-  title: "Home Warranty Dashboard",
-  description: "Manage your home warranty contracts",
+  title: "Customer Portal | Prestige Home Guard",
+  description: "View your home warranty contract and submit service claims.",
   icons: {
     icon: "https://prestigehomeguard.com/wp-content/uploads/2025/01/cropped-BHG-Logo.png", // 👈 your existing logo in public/
   },
@@ -32,7 +32,7 @@ export default function RootLayout({
         <SessionProvider>
           {/* Shared website header/footer (source: prestigehomeguard.com feed) */}
           <SiteHeader />
-          {/* Portal application navigation (unchanged) */}
+          {/* Portal application navigation */}
           <Header />
           <main>{children}</main>
           <SiteFooter />
