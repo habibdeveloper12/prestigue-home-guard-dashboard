@@ -46,7 +46,7 @@ ${description}
             Status: "Received",
             Case_Origin: "Web",
             Best_Phone: bestPhone,
-            Tenant: tenant ? true : false,
+            Tenant: tenant === "Yes",
             Date_reported: new Date().toISOString().split("T")[0],
           },
         ],
